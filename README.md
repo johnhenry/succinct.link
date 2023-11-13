@@ -1,2 +1,3 @@
-# succinct.link
-Personal Projects
+# Succinct.Link
+
+John Henry's Personal Projects
