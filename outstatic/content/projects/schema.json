@@ -8,6 +8,13 @@
       "fieldType": "String",
       "dataType": "string",
       "title": "url"
+    },
+    "video": {
+      "required": false,
+      "description": "Video URL",
+      "fieldType": "String",
+      "dataType": "string",
+      "title": "Video"
     }
   }
 }
