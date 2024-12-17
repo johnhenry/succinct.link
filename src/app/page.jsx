@@ -41,49 +41,6 @@ import typeTransformations from "@/lib/typeTransformations";
 
 const projects = [
   {
-    id: 1,
-    url: "https://gemport.succinct.link",
-    title: "Gemport",
-    type: "::website::",
-    tags: ["::javascript::", "::node::", "::postgresql::", "::supabase::"],
-    metrics: {
-      users: "50k+",
-      conversion: "12%",
-      performance: "98/100",
-    },
-    description: "Generate and import code using AI",
-    color: "blue",
-  },
-  {
-    id: 2,
-    url: "https://human.succinct.link",
-    title: "Human HTTP",
-    type: "::website::",
-    tags: ["::javascript::", "::deno::",],
-    metrics: {
-      components: "200+",
-      brands: "5",
-      satisfaction: "96%",
-    },
-    description: "API powered by humans",
-    color: "rose",
-  },
-  {
-    id: 3,
-    url: "https://conversation-studio.succinct.link",
-    title: "Convesation Studio",
-    type: "::website::",
-    tags: ["::chrome.ai::",  "::javascript::", "::react::", "::ollama::"],
-    metrics: {
-      components: "200+",
-      brands: "5",
-      satisfaction: "96%",
-    },
-    description: "Create and remix converstions using AI",
-    color: "rose",
-  },
-  {
-    id: 4,
     url: "https://github.com/johnhenry/antisocial-network",
     video:"https://www.youtube.com/watch?v=iEwoEwMYJNQ",
     title: "Antisocial Network",
@@ -99,7 +56,19 @@ const projects = [
     color: "rose",
   },
   {
-    id: 5,
+    url: "https://conversation-studio.succinct.link",
+    title: "Convesation Studio",
+    type: "::app::",
+    tags: ["::chrome.ai::",  "::javascript::", "::react::", "::ollama::"],
+    metrics: {
+      components: "200+",
+      brands: "5",
+      satisfaction: "96%",
+    },
+    description: "Create and remix converstions using AI",
+    color: "rose",
+  },
+  {
     url: "https://github.com/johnhenry/ai.matey",
     title: "AI Matey",
     type: "::library::",
@@ -114,7 +83,6 @@ const projects = [
     color: "rose",
   },
   {
-    id: 6,
     url: "https://github.com/johnhenry/ai.captain",
     title: "AI Captain",
     type: "::library::",
@@ -129,7 +97,6 @@ const projects = [
     color: "rose",
   },
   {
-    id: 7,
     url: "https://github.com/johnhenry/semantic-chunker",
     title: "Semantic Chunker",
     type: "::library::",
@@ -143,8 +110,48 @@ const projects = [
       "Semantic Chunker for dividing text into semantic chunks. BYO Embedding engine.",
     color: "rose",
   },
+  {
+    url: "https://chromewebstore.google.com/detail/paste-gpt/jblalfbaalffdkbdildjgmelmpmaignh?hl=en",
+    title: "Paste GPT",
+    type: "::app::",
+    tags: ["Chrome", "Extension",],
+    metrics: {
+      components: "200+",
+      brands: "5",
+      satisfaction: "96%",
+    },
+    description: "Paste web content directly into Chat GPT or Claude AI",
+    color: "rose",
+  },
+  {
+    url: "https://gemport.succinct.link",
+    title: "Gemport",
+    type: "::app::",
+    tags: ["::javascript::", "::node::", "::postgresql::", "::supabase::"],
+    metrics: {
+      users: "50k+",
+      conversion: "12%",
+      performance: "98/100",
+    },
+    description: "Generate and import code using AI",
+    color: "blue",
+  },
+  {
+    url: "https://human.succinct.link",
+    title: "Human HTTP",
+    type: "::app::",
+    tags: ["::javascript::", "::deno::",],
+    metrics: {
+      components: "200+",
+      brands: "5",
+      satisfaction: "96%",
+    },
+    description: "API powered by humans",
+    color: "rose",
+  },
+
   // {
-  //   id: 5,
+  //   id: 8,
   //   url: " https://adventuresinai.succinct.link/",
   //   // video:"https://www.youtube.com/watch?v=iEwoEwMYJNQ",
   //   title: "AI Blog",
@@ -161,7 +168,8 @@ const projects = [
   //   color: "rose",
 
   // }
-];
+].map((project, id)=>({...project, id}));
+
 
 
 const templates = [
@@ -175,6 +183,12 @@ const skills = [
   { name: "Backend", level: 88, color: "green" },
   { name: "UI/UX", level: 85, color: "rose" },
 ];
+
+const careerTimeline = [
+  { period: '2020 - Present', role: 'Senior Frontend Engineer at XYZ Corp' },
+  { period: '2017 - 2020', role: 'UI/UX Designer at ABC Studio' },
+  { period: '2015 - 2017', role: 'Technical Writer at DocumentationPro' },
+]
 
 const SkillBar = ({ skill }) => (
   <div className="mb-4">
@@ -259,13 +273,6 @@ const ProjectModal = ({ project, onClose }) => (
 const Homepage = () => {
   const [activeTab, setActiveTab] = useState("projects");
   const [selectedProject, setSelectedProject] = useState(null);
-  const openProject = (project) => {
-    // Open projects's url in new window if it exists
-    if (project.url) {
-      window.open(project.url, "_blank");
-    }
-    setSelectedProject(project);
-  };
   const [activeTemplate, setActiveTemplate] = useState(null);
   const [text, setText] = useState("");
   const [feedback, setFeedback] = useState(null);
@@ -333,7 +340,7 @@ const Homepage = () => {
               {projects.map((project) => (
                 <div
                   key={project.id}
-                  // onClick={() => openProject(project)}
+                  // onClick={() => setSelectedProject(project)}
                   className="group relative bg-white/5 hover:bg-white/10 backdrop-blur-lg rounded-2xl p-8 pb-2 text-left transition-all duration-300 border border-white/10 hover:border-white/30 cursor-pointer"
                 >
                   <div className="flex justify-between items-start mb-4">
@@ -535,11 +542,7 @@ const Homepage = () => {
               <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-8">
                 <h3 className="text-xl font-bold text-white mb-6">Career Timeline</h3>
                 <div className="space-y-6 relative before:absolute before:left-2 before:top-2 before:h-[calc(100%-20px)] before:w-0.5 before:bg-gradient-to-b before:from-violet-400 before:to-rose-400">
-                  {[
-                    { period: '2020 - Present', role: 'Senior Frontend Engineer at XYZ Corp' },
-                    { period: '2017 - 2020', role: 'UI/UX Designer at ABC Studio' },
-                    { period: '2015 - 2017', role: 'Technical Writer at DocumentationPro' },
-                  ].map((item, index) => (
+                  {careerTimeline.map((item, index) => (
                     <div key={index} className="pl-8 relative">
                       <div className="absolute left-0 top-2 w-4 h-4 rounded-full bg-violet-400 shadow-lg shadow-violet-400/50" />
                       <p className="text-violet-400 font-semibold">{item.period}</p>
