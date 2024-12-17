@@ -62,7 +62,7 @@ const GenZPortfolio = () => {
       <div className="mb-12 relative">
         <div className="text-6xl font-bold mb-4 relative">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500">
-            hey, i'm alex
+            hey, i&apos;m alex
           </span>
           <Sparkles className="absolute -top-4 -right-4 w-8 h-8 text-yellow-400 animate-pulse" />
         </div>
@@ -136,7 +136,7 @@ const GenZPortfolio = () => {
                 <div>
                   <h2 className="text-2xl font-bold mb-2">digital creator</h2>
                   <p className="text-gray-400">
-                    building vibes in the digital space since '20
+                    building vibes in the digital space since &apos;20
                   </p>
                 </div>
               </div>
@@ -195,7 +195,7 @@ const GenZPortfolio = () => {
         {activeSection === "contact" && (
           <Card className="bg-gray-900 p-8 rounded-3xl border-2 border-cyan-500">
             <h2 className="text-3xl font-bold mb-6">
-              let's create something cool ✨
+              let&apos;s create something cool ✨
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[

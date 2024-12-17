@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -399,8 +398,7 @@ const PortfolioApp = () => {
             )}
           </DialogContent>
         </Dialog>
-        // Previous data and component definitions remain the same until the
-        Dialog components...
+        {/* Add a comment about the section */}
         <Dialog open={!!activePost} onOpenChange={() => setActivePost(null)}>
           <DialogContent className="bg-white/80 backdrop-blur-xl">
             {activePost && (

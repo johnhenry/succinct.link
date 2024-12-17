@@ -1,12 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -14,34 +10,19 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  Sparkles,
-  Link,
   Timer,
-  Eye,
   ArrowRight,
   Palette,
   Code,
-  Pen,
   X,
-  Star,
   ExternalLink,
   MessageSquare,
-  Calendar,
-  User,
   Mail,
   Terminal,
-  Bookmark,
-  Box,
   Activity,
-  Award,
-  Coffee,
-  Layout,
   Layers,
   CheckCircle,
   Type,
-  ImageIcon,
-  PlusCircle,
-  ChevronRight,
 } from "lucide-react";
 
 const projects = [
@@ -200,8 +181,8 @@ const ProjectModal = ({ project, onClose }) => (
 
 const Homepage = () => {
   const [activeTab, setActiveTab] = useState("work");
-  const [selectedProject, _setSelectedProject] = useState(null);
-  const setSelectedProject = (project) => {
+  const [selectedProject, setSelectedProject] = useState(null);
+  const openProject = (project) => {
     // Open projects's url in new window if it exists
     if (project.url) {
       window.open(project.url, "_blank");
@@ -211,15 +192,7 @@ const Homepage = () => {
   const [activeTemplate, setActiveTemplate] = useState(null);
   const [text, setText] = useState("");
   const [feedback, setFeedback] = useState(null);
-  const [isReading, setIsReading] = useState(false);
-
-  // Time spent reading tracker
-  useEffect(() => {
-    if (isReading) {
-      const timer = setTimeout(() => setIsReading(false), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [isReading]);
+  const [isReading] = useState(false);
 
   const handleWritingAnalysis = (e) => {
     e.preventDefault();
@@ -269,7 +242,7 @@ const Homepage = () => {
         <div className="text-center mb-16 text-white">
           <div className="flex items-center justify-center gap-3 mb-6">
             {/* <Sparkles className="w-8 h-8" /> */}
-            <h1 className="text-5xl font-bold">John Henry's</h1>
+            <h1 className="text-5xl font-bold">John Henry&apos;s</h1>
           </div>
           <p className="text-2xl mb-2">JavaScript AI Engineer</p>
           <p className="text-lg text-white/80">
@@ -285,7 +258,7 @@ const Homepage = () => {
               {projects.map((project) => (
                 <button
                   key={project.id}
-                  onClick={() => setSelectedProject(project)}
+                  onClick={() => openProject(project)}
                   className="group relative bg-white/5 hover:bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-left transition-all duration-300 border border-white/10 hover:border-white/30"
                 >
                   <div className="flex justify-between items-start mb-4">

@@ -76,7 +76,7 @@ const ModernPortfolio = () => {
         </div>
         <h1 className="text-5xl font-bold mb-4">
           <span className="bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-50 dark:to-slate-200 text-transparent bg-clip-text">
-            Hello, I'm Alex
+            Hello, I&apos;m Alex
           </span>
           <Sparkles className="inline-block ml-2 w-6 h-6 text-amber-400 animate-pulse" />
         </h1>
@@ -230,7 +230,7 @@ const ModernPortfolio = () => {
       {activeSection === "contact" && (
         <Card className="bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle>Let's Connect</CardTitle>
+            <CardTitle>Let&apos;s Connect</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex gap-4">

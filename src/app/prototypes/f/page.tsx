@@ -1,43 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
-  Sparkles,
-  Link,
-  Timer,
-  Eye,
-  ArrowRight,
-  Palette,
-  Code,
-  Pen,
-  X,
-  Star,
-  ExternalLink,
-  MessageSquare,
-  Calendar,
-  User,
   Mail,
   Terminal,
-  Bookmark,
-  Box,
   Activity,
-  Award,
-  Coffee,
 } from "lucide-react";
 
 const Homepage = () => {
   const [activeSection, setActiveSection] = useState("work");
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [isReading, setIsReading] = useState(false);
-
-  // Time spent reading tracker
-  useEffect(() => {
-    if (isReading) {
-      const timer = setTimeout(() => setIsReading(false), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [isReading]);
 
   const skills = [
     { name: "Frontend", level: 92, color: "blue" },
@@ -46,9 +17,9 @@ const Homepage = () => {
   ];
 
   const achievements = [
-    { icon: Star, text: "Featured on Product Hunt", date: "2024" },
-    { icon: Award, text: "Best Design Portfolio", date: "2023" },
-    { icon: Coffee, text: "10k+ Lines of Code", date: "2023" },
+    { icon: null, text: "Featured on Product Hunt", date: "2024" },
+    { icon: null, text: "Best Design Portfolio", date: "2023" },
+    { icon: null, text: "10k+ Lines of Code", date: "2023" },
   ];
 
   const SkillBar = ({ skill }) => (
@@ -63,17 +34,6 @@ const Homepage = () => {
           style={{ width: `${skill.level}%` }}
         />
       </div>
-    </div>
-  );
-
-  const ReadingTimeIndicator = () => (
-    <div className="fixed top-0 left-0 w-full h-1 bg-white/10 z-50">
-      <div
-        className={`h-full bg-violet-400 transition-all duration-300 ${
-          isReading ? "opacity-100" : "opacity-0"
-        }`}
-        style={{ width: isReading ? "100%" : "0%" }}
-      />
     </div>
   );
 
@@ -111,7 +71,6 @@ const Homepage = () => {
   const AchievementCard = ({ achievement }) => (
     <div className="bg-white/5 backdrop-blur-lg rounded-xl p-4">
       <div className="flex items-center gap-3">
-        <achievement.icon className="w-5 h-5 text-violet-400" />
         <div>
           <p className="text-white/90">{achievement.text}</p>
           <p className="text-sm text-white/60">{achievement.date}</p>
@@ -142,7 +101,6 @@ const Homepage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-900 via-fuchsia-900 to-rose-900">
-      <ReadingTimeIndicator />
       <FloatingNav />
       <CurrentStatus />
       <CommandPalette />
@@ -172,7 +130,7 @@ const Homepage = () => {
         {/* Currently Building Section */}
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <Box className="w-5 h-5 text-violet-400" />
+            <div className="w-5 h-5 text-violet-400" />
             <h3 className="text-xl font-bold text-white">Currently Building</h3>
           </div>
           <div className="flex items-center gap-4 bg-white/5 rounded-xl p-4">
@@ -187,7 +145,7 @@ const Homepage = () => {
         {/* Bookmarks/Resources Section */}
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8">
           <div className="flex items-center gap-3 mb-4">
-            <Bookmark className="w-5 h-5 text-violet-400" />
+            <div className="w-5 h-5 text-violet-400" />
             <h3 className="text-xl font-bold text-white">Resources & Tools</h3>
           </div>
           <div className="grid md:grid-cols-2 gap-4">
@@ -202,7 +160,7 @@ const Homepage = () => {
                 href={resource.url}
                 className="flex items-center gap-3 bg-white/5 rounded-xl p-4 hover:bg-white/10 transition"
               >
-                <Link className="w-4 h-4 text-violet-400" />
+                <div className="w-4 h-4 text-violet-400" />
                 <span className="text-white/80">{resource.title}</span>
               </a>
             ))}

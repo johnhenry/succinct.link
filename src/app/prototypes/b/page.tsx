@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { MessageSquare, Scissors, Timer, ThumbsUp } from "lucide-react";
-// import { Alert } from "@/components/ui/alert";
 
 const Homepage = () => {
   const [text, setText] = useState("");
@@ -100,7 +99,7 @@ const Homepage = () => {
           <div className="p-6">
             <h2 className="text-lg font-semibold mb-2">Instant Analysis</h2>
             <p className="text-gray-600">
-              Get immediate feedback on your writing's clarity and concision
+              Get immediate feedback on your writing&apos;s clarity and concision
             </p>
           </div>
           <div className="p-6">

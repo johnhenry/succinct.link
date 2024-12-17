@@ -1,47 +1,30 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   Sparkles,
-  Link,
   Timer,
-  Eye,
   ArrowRight,
   Palette,
   Code,
-  Pen,
+
   X,
-  Star,
+
   ExternalLink,
   MessageSquare,
-  Calendar,
-  User,
+
   Mail,
   Terminal,
-  Bookmark,
-  Box,
+
   Activity,
-  Award,
-  Coffee,
-  Layout,
+
   Layers,
   CheckCircle,
   Type,
-  ImageIcon,
-  PlusCircle,
-  ChevronRight,
+
 } from "lucide-react";
 
 const projects = [
@@ -256,7 +239,7 @@ const Homepage = () => {
                       <Palette className="w-6 h-6 text-rose-400" />
                     )}
                     <span className="text-white/60 text-sm flex items-center gap-2">
-                      <Timer className="w-4 h-4" />
+                      <Timer className="inline w-4 h-4 mr-1" />
                       {project.duration}
                     </span>
                   </div>

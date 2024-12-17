@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import {
   Sparkles,
@@ -10,18 +11,9 @@ import {
   Code,
   Pen,
   X,
-  Star,
   ExternalLink,
   MessageSquare,
-  Calendar,
   User,
-  Mail,
-  Terminal,
-  Bookmark,
-  Box,
-  Activity,
-  Award,
-  Coffee,
 } from "lucide-react";
 
 const Homepage = () => {

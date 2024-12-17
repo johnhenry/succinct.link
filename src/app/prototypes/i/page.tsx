@@ -13,7 +13,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Clock,
-  Calendar,
   Tag,
   User,
   Briefcase,
@@ -23,6 +22,7 @@ import {
   Linkedin,
   Twitter,
   MessageSquare,
+  Calendar,
 } from "lucide-react";
 import {
   Dialog,
@@ -259,7 +259,7 @@ const PortfolioApp = () => {
           <Card>
             <CardHeader>
               <CardTitle>Get in Touch</CardTitle>
-              <CardDescription>Let's discuss your next project</CardDescription>
+              <CardDescription>Let&apos;s Connect</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">

@@ -11,7 +11,6 @@ import {
   Code,
   Pen,
   X,
-  Star,
   ExternalLink,
   MessageSquare,
   Calendar,

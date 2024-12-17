@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Sparkles,
   Rocket,
+  Star,
   Zap,
   Heart,
-  Star,
-  X,
-  Github,
   Twitter,
-  Mail,
+  Github,
   MessageSquare,
+  Mail,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,8 +25,6 @@ import {
 import {
   BarChart,
   Bar,
-  XAxis,
-  YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
@@ -36,7 +33,6 @@ import {
 const GenZPortfolio = () => {
   const [activeSection, setActiveSection] = useState("work");
   const [selectedItem, setSelectedItem] = useState(null);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const projects = [
     {
@@ -104,7 +100,7 @@ const GenZPortfolio = () => {
       <div className="mb-12">
         <h1 className="text-6xl font-bold mb-4 relative inline-block">
           <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text">
-            hey, i'm alex
+            hey, i&apos;m alex
           </span>
           <Sparkles className="absolute -top-4 -right-4 w-8 h-8 text-yellow-400" />
         </h1>
@@ -141,17 +137,10 @@ const GenZPortfolio = () => {
       <div className="space-y-8">
         {activeSection === "work" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {projects.map((project, index) => (
-              <Card
+            {projects.map((project) => (
+              <div
                 key={project.id}
-                className={`
-                  bg-zinc-800 border-2 border-transparent hover:border-purple-500
-                  transform transition-all duration-300 cursor-pointer
-                  ${hoveredIndex === index ? "scale-105" : ""}
-                `}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                onClick={() => setSelectedItem(project)}
+                className="group relative bg-zinc-800 border-2 border-transparent hover:border-purple-500 transform transition-all duration-300 cursor-pointer"
               >
                 <CardHeader>
                   <CardTitle className="text-2xl">{project.title}</CardTitle>
@@ -170,7 +159,7 @@ const GenZPortfolio = () => {
                   </div>
                   <p className="text-sm text-zinc-500">{project.stats}</p>
                 </CardContent>
-              </Card>
+              </div>
             ))}
           </div>
         )}
@@ -181,7 +170,7 @@ const GenZPortfolio = () => {
               <CardHeader>
                 <CardTitle className="text-2xl">digital creator</CardTitle>
                 <p className="text-zinc-400">
-                  building vibes in the digital space since '20
+                  building vibes in the digital space since &apos;20
                 </p>
               </CardHeader>
               <CardContent>
@@ -189,8 +178,6 @@ const GenZPortfolio = () => {
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={skillsData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-                      <XAxis dataKey="name" stroke="#fff" />
-                      <YAxis stroke="#fff" />
                       <Tooltip
                         contentStyle={{
                           backgroundColor: "#18181b",
@@ -224,17 +211,10 @@ const GenZPortfolio = () => {
 
         {activeSection === "blog" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {posts.map((post, index) => (
-              <Card
+            {posts.map((post) => (
+              <div
                 key={post.id}
-                className={`
-                  bg-zinc-800 border-2 border-transparent hover:border-purple-500
-                  transform transition-all duration-300 cursor-pointer
-                  ${hoveredIndex === index ? "scale-105" : ""}
-                `}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                onClick={() => setSelectedItem(post)}
+                className="group relative bg-zinc-800 border-2 border-transparent hover:border-purple-500 transform transition-all duration-300 cursor-pointer"
               >
                 <CardHeader>
                   <div className="text-4xl mb-4">{post.emoji}</div>
@@ -250,7 +230,7 @@ const GenZPortfolio = () => {
                     </span>
                   </div>
                 </CardContent>
-              </Card>
+              </div>
             ))}
           </div>
         )}
@@ -259,7 +239,7 @@ const GenZPortfolio = () => {
           <Card className="bg-zinc-800 border-2 border-purple-500">
             <CardHeader>
               <CardTitle className="text-3xl">
-                let's create something cool ✨
+                Let&apos;s Connect
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -272,7 +252,7 @@ const GenZPortfolio = () => {
                     text: "discord",
                   },
                   { icon: <Mail className="w-5 h-5" />, text: "email" },
-                ].map((link, index) => (
+                ].map((link) => (
                   <Button
                     key={link.text}
                     className={`
@@ -287,6 +267,7 @@ const GenZPortfolio = () => {
                   </Button>
                 ))}
               </div>
+              <span className="text-lg">I&apos;m available for freelance work</span>
             </CardContent>
           </Card>
         )}
@@ -308,8 +289,6 @@ const GenZPortfolio = () => {
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={selectedItem.metrics}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-                      <XAxis dataKey="name" stroke="#fff" />
-                      <YAxis stroke="#fff" />
                       <Tooltip
                         contentStyle={{
                           backgroundColor: "#18181b",

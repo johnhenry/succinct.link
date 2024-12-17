@@ -7,10 +7,9 @@ import {
   CheckCircle,
   Type,
   ImageIcon,
-  PlusCircle,
+
   ChevronRight,
 } from "lucide-react";
-import { Alert } from "@/components/ui/alert";
 
 const Homepage = () => {
   const [activeTemplate, setActiveTemplate] = useState(null);
@@ -32,7 +31,7 @@ const Homepage = () => {
           </div>
           <p className="text-xl text-gray-600">Less slides. More impact.</p>
           <p className="mt-2 text-gray-500">
-            Create presentations that respect your audience's time
+            Create presentations that respect your audience&apos;s time
           </p>
         </div>
 
@@ -127,7 +126,7 @@ const Homepage = () => {
         {/* Sample Stats */}
         <div className="mt-16 text-center">
           <p className="text-sm text-gray-500">
-            Trusted by presenters who value their audience's time
+            Trusted by presenters who value their audience&apos;s time
           </p>
           <div className="mt-4 grid md:grid-cols-3 gap-8">
             <div>
@@ -144,6 +143,9 @@ const Homepage = () => {
             </div>
           </div>
         </div>
+        <p className="text-sm text-gray-500">
+          Let&apos;s create something amazing together
+        </p>
       </div>
     </div>
   );

@@ -10,30 +10,11 @@ import {
   Palette,
   Code,
   Pen,
-  X,
-  Star,
-  ExternalLink,
-  MessageSquare,
-  Calendar,
   User,
-  Mail,
-  Terminal,
-  Bookmark,
-  Box,
-  Activity,
-  Award,
-  Coffee,
-  Clock,
-  Tag,
-  ChevronRight,
 } from "lucide-react";
 
 const Homepage = () => {
-  const [activeTab, setActiveTab] = useState("work");
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [activeBlogCategory, setActiveBlogCategory] = useState("all");
-  const [selectedPost, setSelectedPost] = useState(null);
+  const [activeSection, setActiveSection] = useState("work");
 
   // Data
   const projects = [
@@ -94,69 +75,6 @@ const Homepage = () => {
     { name: "UI/UX", level: 85, color: "rose" },
   ];
 
-  // Project Modal Component
-  const ProjectModal = ({ project, onClose }) => (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-900/95 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-8">
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-2">
-                {project.title}
-              </h3>
-              <div className="flex gap-2">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs px-2 py-1 rounded-full bg-white/10 text-white/80"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <button
-              onClick={onClose}
-              className="text-white/60 hover:text-white"
-            >
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-
-          <div className="bg-white/5 rounded-2xl p-6 mb-6">
-            <div className="grid grid-cols-3 gap-4 text-center">
-              {Object.entries(project.metrics).map(([key, value]) => (
-                <div key={key}>
-                  <p className="text-2xl font-bold text-white mb-1">{value}</p>
-                  <p className="text-sm text-white/60">{key}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <p className="text-white/80 mb-6">{project.description}</p>
-
-          <div className="flex gap-4">
-            <a
-              href="#"
-              className="flex items-center gap-2 text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition"
-            >
-              <ExternalLink className="w-4 h-4" />
-              View Live
-            </a>
-            <a
-              href="#"
-              className="flex items-center gap-2 text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition"
-            >
-              <MessageSquare className="w-4 h-4" />
-              Case Study
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   // Tab Components
   const WorkTab = () => (
     <div>
@@ -164,9 +82,9 @@ const Homepage = () => {
         {filters.map((filter) => (
           <button
             key={filter.id}
-            onClick={() => setActiveFilter(filter.id)}
+            onClick={() => setActiveSection(filter.id)}
             className={`px-4 py-2 rounded-full transition whitespace-nowrap ${
-              activeFilter === filter.id
+              activeSection === filter.id
                 ? "bg-white text-violet-900"
                 : "bg-white/10 text-white hover:bg-white/20"
             }`}
@@ -179,12 +97,12 @@ const Homepage = () => {
       <div className="grid md:grid-cols-2 gap-6">
         {projects
           .filter(
-            (project) => activeFilter === "all" || project.type === activeFilter
+            (project) => activeSection === "all" || project.type === activeSection
           )
           .map((project) => (
             <button
               key={project.id}
-              onClick={() => setSelectedProject(project)}
+              onClick={() => setActiveSection(project.id)}
               className="group relative bg-white/5 hover:bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-left transition-all duration-300 border border-white/10 hover:border-white/30"
             >
               <div className="flex justify-between items-start mb-4">
@@ -343,53 +261,44 @@ const Homepage = () => {
   // Main JSX
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-900 via-fuchsia-900 to-rose-900">
-      {selectedProject && (
-        <ProjectModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
-      )}
-
-      <div className="max-w-5xl mx-auto px-4 py-16">
-        {/* Header */}
-        <div className="text-center mb-16 text-white">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <Sparkles className="w-8 h-8" />
-            <h1 className="text-5xl font-bold">succinct.link</h1>
-          </div>
-          <p className="text-2xl mb-2">Your work. Clearly presented.</p>
-          <p className="text-lg text-white/80">
-            Every project tells a story. Make it count.
-          </p>
+      {/* Header */}
+      <div className="text-center mb-16 text-white">
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <Sparkles className="w-8 h-8" />
+          <h1 className="text-5xl font-bold">succinct.link</h1>
         </div>
+        <p className="text-2xl mb-2">Your work. Clearly presented.</p>
+        <p className="text-lg text-white/80">
+          Every project tells a story. Make it count.
+        </p>
+      </div>
 
-        {/* Main Navigation */}
-        <div className="flex justify-center mb-12">
-          <div className="bg-white/10 backdrop-blur-lg rounded-full p-2">
-            <div className="flex gap-2">
-              {["work", "about", "blog", "contact"].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-6 py-2 rounded-full transition ${
-                    activeTab === tab
-                      ? "bg-white text-violet-900"
-                      : "text-white hover:bg-white/20"
-                  }`}
-                >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </button>
-              ))}
-            </div>
+      {/* Main Navigation */}
+      <div className="flex justify-center mb-12">
+        <div className="bg-white/10 backdrop-blur-lg rounded-full p-2">
+          <div className="flex gap-2">
+            {["work", "about", "blog", "contact"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveSection(tab)}
+                className={`px-6 py-2 rounded-full transition ${
+                  activeSection === tab
+                    ? "bg-white text-violet-900"
+                    : "text-white hover:bg-white/20"
+                }`}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
           </div>
         </div>
+      </div>
 
-        {/* Tab Content */}
-        <div className="min-h-[60vh]">
-          {activeTab === "work" && <WorkTab />}
-          {activeTab === "about" && <AboutTab />}
-          {activeTab === "contact" && <ContactTab />}
-        </div>
+      {/* Tab Content */}
+      <div className="min-h-[60vh]">
+        {activeSection === "work" && <WorkTab />}
+        {activeSection === "about" && <AboutTab />}
+        {activeSection === "contact" && <ContactTab />}
       </div>
     </div>
   );

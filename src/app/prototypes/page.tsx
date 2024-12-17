@@ -15,12 +15,6 @@ import {
 } from "@/components/ui/dialog";
 import {
   Layout,
-  Layers,
-  CheckCircle,
-  Type,
-  ImageIcon,
-  PlusCircle,
-  ChevronRight,
   Github,
   Twitter,
   Mail,

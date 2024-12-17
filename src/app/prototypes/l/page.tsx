@@ -1,18 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Sparkles,
   Rocket,
-  Zap,
-  Heart,
-  Star,
-  X,
-  Github,
-  Twitter,
-  Mail,
-  MessageSquare,
-  Filter,
+  Timer,
+  Eye,
+  ArrowRight,
+  Palette,
+  Code,
+  Pen,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -115,9 +112,9 @@ const ModernPortfolio = () => {
     value: skill.level,
   }));
 
-  const filteredProjects = projects.filter(
-    (project) => projectFilter === "all" || project.type === projectFilter
-  );
+  // const filteredProjects = projects.filter(
+  //   (project) => projectFilter === "all" || project.type === projectFilter
+  // );
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-50 p-4 md:p-8">
@@ -125,7 +122,7 @@ const ModernPortfolio = () => {
       <div className="mb-12">
         <h1 className="text-5xl font-bold mb-4 relative inline-block">
           <span className="bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-50 dark:to-slate-200 text-transparent bg-clip-text">
-            Hello, I'm Alex
+            Hello, I&apos;m Alex
           </span>
           <Sparkles className="absolute -top-4 -right-4 w-6 h-6 text-amber-400" />
         </h1>
@@ -138,9 +135,9 @@ const ModernPortfolio = () => {
       <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
         {[
           { name: "work", icon: <Rocket className="w-4 h-4" /> },
-          { name: "about", icon: <Star className="w-4 h-4" /> },
-          { name: "blog", icon: <Zap className="w-4 h-4" /> },
-          { name: "contact", icon: <Heart className="w-4 h-4" /> },
+          { name: "about", icon: <Palette className="w-4 h-4" /> },
+          { name: "blog", icon: <Pen className="w-4 h-4" /> },
+          { name: "contact", icon: <Eye className="w-4 h-4" /> },
         ].map((section) => (
           <Button
             key={section.name}
@@ -185,16 +182,16 @@ const ModernPortfolio = () => {
 
             {/* Projects Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filteredProjects.map((project, index) => (
+              {projects.map((project) => (
                 <Card
                   key={project.id}
                   className={`
                     bg-white dark:bg-slate-800 border-2 border-transparent
                     hover:border-slate-200 dark:hover:border-slate-700
                     transform transition-all duration-300 cursor-pointer
-                    ${hoveredIndex === index ? "scale-102" : ""}
+                    ${hoveredIndex === projects.indexOf(project) ? "scale-102" : ""}
                   `}
-                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseEnter={() => setHoveredIndex(projects.indexOf(project))}
                   onMouseLeave={() => setHoveredIndex(null)}
                   onClick={() => setSelectedItem(project)}
                 >
@@ -255,7 +252,7 @@ const ModernPortfolio = () => {
 
         {activeSection === "blog" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {posts.map((post, index) => (
+            {posts.map((post) => (
               <Card
                 key={post.id}
                 className={`
@@ -285,7 +282,7 @@ const ModernPortfolio = () => {
         {activeSection === "contact" && (
           <Card className="bg-white dark:bg-slate-800">
             <CardHeader>
-              <CardTitle className="text-2xl">Let's Connect</CardTitle>
+              <CardTitle className="text-2xl">Let&apos;s Connect</CardTitle>
               <p className="text-slate-600 dark:text-slate-400">
                 Always interested in hearing about new projects and
                 opportunities
@@ -294,13 +291,13 @@ const ModernPortfolio = () => {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
-                  { icon: <Twitter className="w-5 h-5" />, text: "Twitter" },
-                  { icon: <Github className="w-5 h-5" />, text: "GitHub" },
+                  { icon: <ArrowRight className="w-5 h-5" />, text: "Twitter" },
+                  { icon: <Code className="w-5 h-5" />, text: "GitHub" },
                   {
-                    icon: <MessageSquare className="w-5 h-5" />,
+                    icon: <Timer className="w-5 h-5" />,
                     text: "Message",
                   },
-                  { icon: <Mail className="w-5 h-5" />, text: "Email" },
+                  { icon: <Pen className="w-5 h-5" />, text: "Email" },
                 ].map((link) => (
                   <Button
                     key={link.text}
