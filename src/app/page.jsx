@@ -1,5 +1,16 @@
 "use client";
 
+"use tailwind colors: bg-green-400/10 text-green-400";
+"use tailwind colors: bg-yellow-400/10 text-yellow-400";
+"use tailwind colors: bg-blue-400/10 text-blue-400";
+"use tailwind colors: bg-red-400/10 text-red-400";
+"use tailwind colors: bg-rose-400/10 text-rose-400";
+"use tailwind colors: bg-purple-400/10 text-purple-400";
+"use tailwind colors: bg-sky-400/10 text-sky-400";
+"use tailwind colors: bg-teal-400/10 text-teal-400";
+"use tailwind colors: bg-orange-400/10 text-orange-400";
+"use tailwind colors: bg-emerald-400/10 text-emerald-400";
+
 import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,22 +34,24 @@ import {
   Layers,
   CheckCircle,
   Type,
+  Video,
 } from "lucide-react";
+import tagTransformations from "@/lib/tagTransformations";
 
 const projects = [
   {
     id: 1,
     url: "https://gemport.succinct.link",
-    title: "Gemport -- Generate and import code using AI",
+    title: "Gemport",
     duration: "2 mins",
     type: "design",
-    tags: ["JavaScript", "Node.js", "PostgreSQL", "Supabase"],
+    tags: ["::javascript::", "::node::", "::postgresql::", "::supabase::"],
     metrics: {
       users: "50k+",
       conversion: "12%",
       performance: "98/100",
     },
-    description: "Platform for generating code via import url",
+    description: "Generate and import code using AI",
     color: "blue",
   },
   {
@@ -47,7 +60,7 @@ const projects = [
     title: "Human HTTP",
     duration: "1 min",
     type: "design",
-    tags: ["JavaDcript", "Deno", "WebSockets"],
+    tags: ["::javascript::", "::deno::",],
     metrics: {
       components: "200+",
       brands: "5",
@@ -57,12 +70,12 @@ const projects = [
     color: "rose",
   },
   {
-    id: 2,
+    id: 3,
     url: "https://conversation-studio.succinct.link",
     title: "Convesation Studio",
     duration: "1 min",
     type: "design",
-    tags: ["Chrome ai", "Javascript", "React", "Ollama"],
+    tags: ["::chrome.ai::",  "::javascript::", "::react::", "::ollama::"],
     metrics: {
       components: "200+",
       brands: "5",
@@ -72,12 +85,13 @@ const projects = [
     color: "rose",
   },
   {
-    id: 2,
+    id: 4,
     url: "https://github.com/johnhenry/antisocial-network",
+    video:"https://www.youtube.com/watch?v=iEwoEwMYJNQ",
     title: "Antisocial Network",
     duration: "1 min",
     type: "code",
-    tags: ["Chrome ai", "Javascript", "Next.js", "Ollama", "SurrealDB"],
+    tags: [ "::javascript::", "::next.js::", "::ollama::", "::surrealdb::"],
     metrics: {
       components: "200+",
       brands: "5",
@@ -87,7 +101,26 @@ const projects = [
       "Interact with multiple bots using a social-network like experience",
     color: "rose",
   },
+  // {
+  //   id: 5,
+  //   url: " https://adventuresinai.succinct.link/",
+  //   // video:"https://www.youtube.com/watch?v=iEwoEwMYJNQ",
+  //   title: "AI Blog",
+  //   // duration: "1 min",
+  //   type: "code",
+  //   tags: ["::chrome.ai::", "::javascript::", "::next.js::", "::ollama::", "::surrealdb::"],
+  //   metrics: {
+  //     components: "200+",
+  //     brands: "5",
+  //     satisfaction: "96%",
+  //   },
+  //   description:
+  //     "Blog about my experiences using AI",
+  //   color: "rose",
+
+  // }
 ];
+
 
 const templates = [
   { id: 1, name: "Pitch Deck", slides: 5, time: "3 min" },
@@ -126,15 +159,16 @@ const ProjectModal = ({ project, onClose }) => (
               {project?.title}
             </DialogTitle>
             <div className="flex gap-2">
-              {project?.tags.map((tag) => (
-                <Badge
+              {project?.tags.map((tag) => {
+
+                return (<Badge
                   key={tag}
                   variant="secondary"
                   className="bg-white/10 text-white"
                 >
                   {tag}
-                </Badge>
-              ))}
+                </Badge>)
+              })}
             </div>
           </div>
           <Button
@@ -205,7 +239,7 @@ const Homepage = () => {
       ],
     });
   };
-  const TABS = ["projects", "about"]; // TODO Re-add: "templates", "writing", "about"
+  const TABS = ["projects"]; // TODO Re-add: "templates", "writing", "about"
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-900 via-fuchsia-900 to-rose-900 pt-12">
@@ -255,11 +289,10 @@ const Homepage = () => {
           {activeTab === "projects" && (
             <div className="grid md:grid-cols-2 gap-6">
               {projects.map((project) => (
-                <a
+                <div
                   key={project.id}
-                  href={project.url}
                   // onClick={() => openProject(project)}
-                  className="group relative bg-white/5 hover:bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-left transition-all duration-300 border border-white/10 hover:border-white/30"
+                  className="group relative bg-white/5 hover:bg-white/10 backdrop-blur-lg rounded-2xl p-8 pb-2 text-left transition-all duration-300 border border-white/10 hover:border-white/30 cursor-pointer"
                 >
                   <div className="flex justify-between items-start mb-4">
                     {project.type === "code" && (
@@ -268,28 +301,46 @@ const Homepage = () => {
                     {project.type === "design" && (
                       <Palette className="w-6 h-6 text-rose-400" />
                     )}
-                    {/* <span className="text-white/60 text-sm flex items-center gap-2">
-                      <Timer className="w-4 h-4" />
-                      {project.duration}
-                    </span> */}
+
                   </div>
                   <h3 className="text-xl font-semibold text-white mb-2">
                     {project.title}
                   </h3>
-                  <p className="text-white/60 mb-4">{project.description}</p>
+                  <p className="text-white/80 mb-6">{project?.description}</p>
                   <div className="flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <Badge
+                    {project.tags.map((tag) => {
+                      if (tagTransformations[tag]) {
+                        const TAG = tagTransformations[tag]
+                        return (
+                          <Badge
+                            key={tag}
+                            variant="secondary"
+                            className={`flex flex-row gap-2 ${TAG.bg} ${TAG.color}`}
+                          >
+                            {TAG.icon}
+                            {TAG.text}
+                          </Badge>
+                        )
+                      }
+                    return <Badge
                         key={tag}
                         variant="secondary"
                         className="bg-white/10 text-white"
                       >
                         {tag}
-                      </Badge>
-                    ))}
+                      </Badge>})}
                   </div>
-                  <ArrowRight className="absolute bottom-8 right-8 w-6 h-6 text-white/0 group-hover:text-white/100 transition-all duration-300" />
-                </a>
+                  <div className="flex flex-wrap gap-2 pt-4 pb-4 justify-end text-white/0 transition-all duration-300 group-hover:text-white/100">
+                    {project.video && (
+                      <a href={project.video} target="_blank"  >
+                        <Video className="w-6 h-6 text-sm flex items-center gap-2" />
+                      </a>
+                    )}
+                    <a href={project.url} target="_blank" >
+                      <ArrowRight className="w-6 h-6" />
+                    </a>
+                  </div>
+                </div>
               ))}
             </div>
           )}
