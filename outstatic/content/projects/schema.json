@@ -15,6 +15,13 @@
       "fieldType": "String",
       "dataType": "string",
       "title": "Video"
+    },
+    "type": {
+      "required": true,
+      "description": "Type of project",
+      "fieldType": "String",
+      "dataType": "string",
+      "title": "type"
     }
   }
 }
