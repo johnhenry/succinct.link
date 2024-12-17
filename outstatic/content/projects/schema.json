@@ -1,0 +1,13 @@
+{
+  "title": "projects",
+  "type": "object",
+  "properties": {
+    "url": {
+      "required": true,
+      "description": "Project URL",
+      "fieldType": "String",
+      "dataType": "string",
+      "title": "url"
+    }
+  }
+}
