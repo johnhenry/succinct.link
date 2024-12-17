@@ -62,7 +62,7 @@ const projects = [
     title: "Convesation Studio",
     duration: "1 min",
     type: "design",
-    tags: ["JavaScript", "Deno", "WebSockets"],
+    tags: ["Chrome ai", "Javascript", "React", "Ollama"],
     metrics: {
       components: "200+",
       brands: "5",
@@ -77,13 +77,14 @@ const projects = [
     title: "Antisocial Network",
     duration: "1 min",
     type: "code",
-    tags: ["JavaScript", "Deno", "WebSockets"],
+    tags: ["Chrome ai", "Javascript", "Next.js", "Ollama", "SurrealDB"],
     metrics: {
       components: "200+",
       brands: "5",
       satisfaction: "96%",
     },
-    description: "Interact with multiple bots using a social-network like experience",
+    description:
+      "Interact with multiple bots using a social-network like experience",
     color: "rose",
   },
 ];
@@ -180,7 +181,7 @@ const ProjectModal = ({ project, onClose }) => (
 );
 
 const Homepage = () => {
-  const [activeTab, setActiveTab] = useState("work");
+  const [activeTab, setActiveTab] = useState("projects");
   const [selectedProject, setSelectedProject] = useState(null);
   const openProject = (project) => {
     // Open projects's url in new window if it exists
@@ -204,7 +205,7 @@ const Homepage = () => {
       ],
     });
   };
-  const TABS = ["work"]; // TODO Re-add: "templates", "writing", "about"
+  const TABS = ["projects"]; // TODO Re-add: "templates", "writing", "about"
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-900 via-fuchsia-900 to-rose-900">
@@ -242,23 +243,22 @@ const Homepage = () => {
         <div className="text-center mb-16 text-white">
           <div className="flex items-center justify-center gap-3 mb-6">
             {/* <Sparkles className="w-8 h-8" /> */}
-            <h1 className="text-5xl font-bold">John Henry&apos;s</h1>
+            <h1 className="text-5xl font-bold">John Henry</h1>
           </div>
           <p className="text-2xl mb-2">JavaScript AI Engineer</p>
-          <p className="text-lg text-white/80">
-            Every project tells a story. Make it count.
-          </p>
+          <p className="text-lg text-white/80">Every project tells a story.</p>
         </div>
 
         {/* Main Content */}
         <div className="space-y-8">
           {/* Work Section */}
-          {activeTab === "work" && (
+          {activeTab === "projects" && (
             <div className="grid md:grid-cols-2 gap-6">
               {projects.map((project) => (
-                <button
+                <a
                   key={project.id}
-                  onClick={() => openProject(project)}
+                  href={project.url}
+                  // onClick={() => openProject(project)}
                   className="group relative bg-white/5 hover:bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-left transition-all duration-300 border border-white/10 hover:border-white/30"
                 >
                   <div className="flex justify-between items-start mb-4">
@@ -289,7 +289,7 @@ const Homepage = () => {
                     ))}
                   </div>
                   <ArrowRight className="absolute bottom-8 right-8 w-6 h-6 text-white/0 group-hover:text-white/100 transition-all duration-300" />
-                </button>
+                </a>
               ))}
             </div>
           )}
@@ -371,7 +371,9 @@ const Homepage = () => {
                       </p>
                     </div>
                     <div className="bg-white/10 p-4 rounded-lg">
-                      <h3 className="font-semibold text-white">Clarity Score</h3>
+                      <h3 className="font-semibold text-white">
+                        Clarity Score
+                      </h3>
                       <p className="text-2xl text-violet-400">8/10</p>
                     </div>
                     <div className="bg-white/10 p-4 rounded-lg">
@@ -449,9 +451,12 @@ const Homepage = () => {
       )}
 
       {/* Quick Contact Button */}
-      <button className="fixed bottom-8 right-8 bg-violet-500 hover:bg-violet-600 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110 z-40">
+      <a
+        className="fixed bottom-8 right-8 bg-violet-500 hover:bg-violet-600 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110 z-40"
+        href={`mailto:${"john@iamjohnhenry.com"}`}
+      >
         <Mail className="w-6 h-6" />
-      </button>
+      </a>
     </div>
   );
 };
