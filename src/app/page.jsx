@@ -37,14 +37,14 @@ import {
   Video,
 } from "lucide-react";
 import tagTransformations from "@/lib/tagTransformations";
+import typeTransformations from "@/lib/typeTransformations";
 
 const projects = [
   {
     id: 1,
     url: "https://gemport.succinct.link",
     title: "Gemport",
-    duration: "2 mins",
-    type: "design",
+    type: "::website::",
     tags: ["::javascript::", "::node::", "::postgresql::", "::supabase::"],
     metrics: {
       users: "50k+",
@@ -58,8 +58,7 @@ const projects = [
     id: 2,
     url: "https://human.succinct.link",
     title: "Human HTTP",
-    duration: "1 min",
-    type: "design",
+    type: "::website::",
     tags: ["::javascript::", "::deno::",],
     metrics: {
       components: "200+",
@@ -73,8 +72,7 @@ const projects = [
     id: 3,
     url: "https://conversation-studio.succinct.link",
     title: "Convesation Studio",
-    duration: "1 min",
-    type: "design",
+    type: "::website::",
     tags: ["::chrome.ai::",  "::javascript::", "::react::", "::ollama::"],
     metrics: {
       components: "200+",
@@ -89,8 +87,7 @@ const projects = [
     url: "https://github.com/johnhenry/antisocial-network",
     video:"https://www.youtube.com/watch?v=iEwoEwMYJNQ",
     title: "Antisocial Network",
-    duration: "1 min",
-    type: "code",
+    type: "::code::",
     tags: [ "::javascript::", "::next.js::", "::ollama::", "::surrealdb::"],
     metrics: {
       components: "200+",
@@ -99,6 +96,51 @@ const projects = [
     },
     description:
       "Interact with multiple bots using a social-network like experience",
+    color: "rose",
+  },
+  {
+    id: 5,
+    url: "https://github.com/johnhenry/ai.matey",
+    title: "AI Matey",
+    type: "::library::",
+    tags: [ "::javascript::", "::chrome.ai::", "::ollama::"],
+    metrics: {
+      components: "200+",
+      brands: "5",
+      satisfaction: "96%",
+    },
+    description:
+      "Polyfill, alternative client, and documentatin for working wtih Chrome's Built-in AI API",
+    color: "rose",
+  },
+  {
+    id: 6,
+    url: "https://github.com/johnhenry/ai.captain",
+    title: "AI Captain",
+    type: "::library::",
+    tags: [ "::javascript::", "::chrome.ai::"],
+    metrics: {
+      components: "200+",
+      brands: "5",
+      satisfaction: "96%",
+    },
+    description:
+      "Utilities extneding the functionality of Chrome's Built-in AI API",
+    color: "rose",
+  },
+  {
+    id: 7,
+    url: "https://github.com/johnhenry/semantic-chunker",
+    title: "Semantic Chunker",
+    type: "::library::",
+    tags: [ "::javascript::", "::chrome.ai::", "::ollama::"],
+    metrics: {
+      components: "200+",
+      brands: "5",
+      satisfaction: "96%",
+    },
+    description:
+      "Semantic Chunker for dividing text into semantic chunks. BYO Embedding engine.",
     color: "rose",
   },
   // {
@@ -295,6 +337,7 @@ const Homepage = () => {
                   className="group relative bg-white/5 hover:bg-white/10 backdrop-blur-lg rounded-2xl p-8 pb-2 text-left transition-all duration-300 border border-white/10 hover:border-white/30 cursor-pointer"
                 >
                   <div className="flex justify-between items-start mb-4">
+                    {typeTransformations[project.type]}
                     {project.type === "code" && (
                       <Code className="w-6 h-6 text-blue-400" />
                     )}
