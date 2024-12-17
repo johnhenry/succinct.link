@@ -22,6 +22,14 @@
       "fieldType": "String",
       "dataType": "string",
       "title": "type"
+    },
+    "tags": {
+      "required": false,
+      "description": "Tags",
+      "fieldType": "Tags",
+      "dataType": "array",
+      "title": "tags",
+      "values": []
     }
   }
 }
