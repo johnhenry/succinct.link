@@ -205,10 +205,10 @@ const Homepage = () => {
       ],
     });
   };
-  const TABS = ["projects"]; // TODO Re-add: "templates", "writing", "about"
+  const TABS = ["projects", "about"]; // TODO Re-add: "templates", "writing", "about"
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-900 via-fuchsia-900 to-rose-900">
+    <div className="min-h-screen bg-gradient-to-br from-violet-900 via-fuchsia-900 to-rose-900 pt-12">
       {/* Reading Progress Indicator */}
       <div className="fixed top-0 left-0 w-full h-1 bg-white/10 z-50">
         <div
@@ -435,6 +435,23 @@ const Homepage = () => {
                     <CheckCircle className="w-5 h-5 text-violet-400" />
                     <span className="text-white/80">Quality Assurance</span>
                   </div>
+                </div>
+              </div>
+
+              <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-8">
+                <h3 className="text-xl font-bold text-white mb-6">Career Timeline</h3>
+                <div className="space-y-6 relative before:absolute before:left-2 before:top-2 before:h-[calc(100%-20px)] before:w-0.5 before:bg-gradient-to-b before:from-violet-400 before:to-rose-400">
+                  {[
+                    { period: '2020 - Present', role: 'Senior Frontend Engineer at XYZ Corp' },
+                    { period: '2017 - 2020', role: 'UI/UX Designer at ABC Studio' },
+                    { period: '2015 - 2017', role: 'Technical Writer at DocumentationPro' },
+                  ].map((item, index) => (
+                    <div key={index} className="pl-8 relative">
+                      <div className="absolute left-0 top-2 w-4 h-4 rounded-full bg-violet-400 shadow-lg shadow-violet-400/50" />
+                      <p className="text-violet-400 font-semibold">{item.period}</p>
+                      <p className="text-white/80">{item.role}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
