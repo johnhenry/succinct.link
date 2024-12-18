@@ -45,6 +45,10 @@
         {
           "value": "::surrealdb::",
           "label": "::surrealdb::"
+        },
+        {
+          "value": "::chrome.ai::",
+          "label": "::chrome.ai::"
         }
       ]
     },
