@@ -69,6 +69,14 @@
         {
           "value": "::deno::",
           "label": "::deno::"
+        },
+        {
+          "value": "Chrome",
+          "label": "Chrome"
+        },
+        {
+          "value": "Extension",
+          "label": "Extension"
         }
       ]
     },
