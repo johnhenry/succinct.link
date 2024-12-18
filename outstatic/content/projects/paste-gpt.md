@@ -4,7 +4,7 @@ author:
   picture: 'https://avatars.githubusercontent.com/u/393817?v=4'
 coverImage: ''
 title: 'Paste GPT'
-status: 'draft'
+status: 'published'
 slug: 'paste-gpt'
 description: 'Paste web content directly into Chat GPT or Claude AI'
 url: 'https://chromewebstore.google.com/detail/paste-gpt/jblalfbaalffdkbdildjgmelmpmaignh?hl=en'
@@ -12,7 +12,7 @@ type: '::app::'
 tags: [{"label":"Chrome","value":"Chrome"},{"label":"Extension","value":"Extension"}]
 color: 'rose'
 video: ''
-publishedAt: '2024-12-18T09:46:49.000Z'
+publishedAt: '2024-12-03T09:46:49.000Z'
 ---
 
 Paste web content directly into Chat GPT or Claude AI
