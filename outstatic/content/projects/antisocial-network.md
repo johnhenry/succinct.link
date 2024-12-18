@@ -4,7 +4,7 @@ author:
   picture: 'https://avatars.githubusercontent.com/u/393817?v=4'
 coverImage: ''
 title: 'Antisocial Network'
-status: 'draft'
+status: 'published'
 slug: 'antisocial-network'
 description: ''
 url: 'https://github.com/johnhenry/antisocial-network'

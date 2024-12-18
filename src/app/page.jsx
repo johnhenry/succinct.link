@@ -248,7 +248,7 @@ const ProjectModal = ({ project, onClose }) => (
         </div>
       </div>
 
-      <p className="text-white/80 mb-6">{project?.description}</p>
+      <p className="text-white/80 mb-6">{project?.content}</p>
 
       <div className="flex gap-4">
         <Button
@@ -270,6 +270,7 @@ const ProjectModal = ({ project, onClose }) => (
   </Dialog>
 );
 
+import {useProjects} from "./project-provider";
 const Homepage = () => {
   const [activeTab, setActiveTab] = useState("projects");
   const [selectedProject, setSelectedProject] = useState(null);
@@ -277,7 +278,7 @@ const Homepage = () => {
   const [text, setText] = useState("");
   const [feedback, setFeedback] = useState(null);
   const [isReading] = useState(false);
-
+  const projects = useProjects();
   const handleWritingAnalysis = (e) => {
     e.preventDefault();
     setFeedback({
@@ -337,9 +338,9 @@ const Homepage = () => {
           {/* Work Section */}
           {activeTab === "projects" && (
             <div className="grid md:grid-cols-2 gap-6">
-              {projects.map((project) => (
+              {projects.map((project, index) => (
                 <div
-                  key={project.id}
+                  key={index}
                   // onClick={() => setSelectedProject(project)}
                   className="group relative bg-white/5 hover:bg-white/10 backdrop-blur-lg rounded-2xl p-8 pb-2 text-left transition-all duration-300 border border-white/10 hover:border-white/30 cursor-pointer"
                 >
@@ -356,14 +357,14 @@ const Homepage = () => {
                   <h3 className="text-xl font-semibold text-white mb-2">
                     {project.title}
                   </h3>
-                  <p className="text-white/80 mb-6">{project?.description}</p>
+                  <p className="text-white/80 mb-6">{project?.content}</p>
                   <div className="flex flex-wrap gap-2">
-                    {project.tags.map((tag) => {
-                      if (tagTransformations[tag]) {
-                        const TAG = tagTransformations[tag]
+                    {project.tags.map(({label, value }, index) => {
+                      if (tagTransformations[value]) {
+                        const TAG = tagTransformations[value]
                         return (
                           <Badge
-                            key={tag}
+                            key={index}
                             variant="secondary"
                             className={`flex flex-row gap-2 ${TAG.bg} ${TAG.color}`}
                           >
@@ -373,11 +374,11 @@ const Homepage = () => {
                         )
                       }
                     return <Badge
-                        key={tag}
+                        key={index}
                         variant="secondary"
                         className="bg-white/10 text-white"
                       >
-                        {tag}
+                        {label}
                       </Badge>})}
                   </div>
                   <div className="flex flex-wrap gap-2 pt-4 pb-4 justify-end text-white/0 transition-all duration-300 group-hover:text-white/100">
