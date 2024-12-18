@@ -6,7 +6,7 @@ coverImage: ''
 title: 'Convesation Studio'
 status: 'published'
 slug: 'conversation-studio'
-description: 'Create and remix converstions using AI'
+description: 'Create and remix conversations using AI'
 url: 'https://conversation-studio.succinct.link'
 type: '::app::'
 tags: [{"label":"::chrome.ai::","value":"::chrome.ai::"},{"label":"::javascript::","value":"::javascript::"},{"label":"::react::","value":"::react::"},{"label":"::ollama::","value":"::ollama::"}]
@@ -15,4 +15,4 @@ video: ''
 publishedAt: '2024-12-07T09:46:49.000Z'
 ---
 
-Create and remix converstions using AI
+Create and remix conversations using AI
