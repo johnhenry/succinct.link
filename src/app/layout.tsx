@@ -18,6 +18,12 @@ export default async function RootLayout({
   const projects = await getDocuments("projects", ['title', 'url', 'video', 'type', 'tags', 'metrics', 'content', 'color']);
   return (
     <html lang="en">
+      <head>
+        <link
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet"
+        />
+      </head>
       <Provider value={projects}>
         <body>{children}</body>
       </Provider>

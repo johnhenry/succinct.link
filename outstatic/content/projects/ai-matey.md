@@ -6,7 +6,6 @@ coverImage: ''
 title: 'AI Matey'
 status: 'published'
 slug: 'ai-matey'
-description: 'Polyfill, alternative client, and documentatin for working wtih Chrome''s Built-in AI API'
 url: 'https://github.com/johnhenry/ai.matey'
 type: '::library::'
 tags: [{"label":"::javascript::","value":"::javascript::"},{"label":"::chrome.ai::","value":"::chrome.ai::"},{"label":"::ollama::","value":"::ollama::"}]

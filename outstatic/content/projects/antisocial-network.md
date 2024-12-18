@@ -6,13 +6,13 @@ coverImage: ''
 title: 'Antisocial Network'
 status: 'published'
 slug: 'antisocial-network'
-description: ''
 url: 'https://github.com/johnhenry/antisocial-network'
 video: 'https://www.youtube.com/watch?v=iEwoEwMYJNQ'
 type: '::code::'
-tags: [{"label":"::javascript::","value":"::javascript::"},{"label":"::next.js::","value":"::nextJs::"},{"label":"::ollama::","value":"::ollama::"},{"label":"::surrealdb::","value":"::surrealdb::"}]
+tags: [{"label":"::javascript::","value":"::javascript::"},{"label":"::ollama::","value":"::ollama::"},{"label":"::surrealdb::","value":"::surrealdb::"},{"label":"::next.js::","value":"::next.js::"}]
 color: 'rose'
 publishedAt: '2024-12-08T22:05:12.155Z'
+updatedAt: '2024-12-18T11:59:36.088Z'
 ---
 
 Interact with multiple bots using a social-network like experience

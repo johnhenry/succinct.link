@@ -6,7 +6,6 @@ coverImage: ''
 title: 'Paste GPT'
 status: 'published'
 slug: 'paste-gpt'
-description: 'Paste web content directly into Chat GPT or Claude AI'
 url: 'https://chromewebstore.google.com/detail/paste-gpt/jblalfbaalffdkbdildjgmelmpmaignh?hl=en'
 type: '::app::'
 tags: [{"label":"Chrome","value":"Chrome"},{"label":"Extension","value":"Extension"}]

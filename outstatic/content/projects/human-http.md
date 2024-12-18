@@ -6,7 +6,6 @@ coverImage: ''
 title: 'Human HTTP'
 status: 'published'
 slug: 'human-http'
-description: 'API powered by humans'
 url: 'https://human.succinct.link'
 type: '::app::'
 tags: [{"label":"::javascript::","value":"::javascript::"},{"label":"::deno::","value":"::deno::"}]
