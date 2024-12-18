@@ -53,6 +53,18 @@
         {
           "value": "::react::",
           "label": "::react::"
+        },
+        {
+          "value": "::node::",
+          "label": "::node::"
+        },
+        {
+          "value": "::postgresql::",
+          "label": "::postgresql::"
+        },
+        {
+          "value": "::supabase::",
+          "label": "::supabase::"
         }
       ]
     },
