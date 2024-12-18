@@ -4,14 +4,15 @@ author:
   picture: 'https://avatars.githubusercontent.com/u/393817?v=4'
 coverImage: ''
 title: 'Human HTTP'
-status: 'published'
+status: 'draft'
 slug: 'human-http'
 description: 'API powered by humans'
 url: 'https://human.succinct.link'
 type: '::app::'
 tags: [{"label":"::javascript::","value":"::javascript::"},{"label":"::deno::","value":"::deno::"}]
 color: 'rose'
-publishedAt: '2024-12-18T01:46:49-08:00'
+video: ''
+publishedAt: '2024-12-18T09:46:49.000Z'
 ---
 
 API powered by humans

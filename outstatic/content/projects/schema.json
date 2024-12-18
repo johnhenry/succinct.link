@@ -65,6 +65,10 @@
         {
           "value": "::supabase::",
           "label": "::supabase::"
+        },
+        {
+          "value": "::deno::",
+          "label": "::deno::"
         }
       ]
     },
