@@ -49,6 +49,10 @@
         {
           "value": "::chrome.ai::",
           "label": "::chrome.ai::"
+        },
+        {
+          "value": "::react::",
+          "label": "::react::"
         }
       ]
     },
