@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { Provider } from "./project-provider"
-import {  getDocuments, getCollections } from 'outstatic/server';
+import {  getDocuments } from 'outstatic/server';
 
 
 export const metadata: Metadata = {
