@@ -1,6 +1,6 @@
 ---
 title: 'Spintax'
-status: 'draft'
+status: 'published'
 author:
   name: 'John Henry'
   picture: 'https://avatars.githubusercontent.com/u/393817?v=4'
