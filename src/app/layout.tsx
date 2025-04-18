@@ -25,16 +25,6 @@ export default async function RootLayout({
     "content",
     "color",
   ]);
-  const demos = await getDocuments("demos", [
-    "title",
-    "url",
-    "video",
-    "type",
-    "tags",
-    "metrics",
-    "content",
-    "color",
-  ]);
   return (
     <html lang="en">
       <head>

@@ -11,7 +11,7 @@
 "use tailwind colors: bg-orange-400/10 text-orange-400";
 "use tailwind colors: bg-emerald-400/10 text-emerald-400";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -147,7 +147,7 @@ const Homepage = () => {
   const [feedback, setFeedback] = useState(null);
   const [isReading] = useState(false);
   const [selectedTag, setSelectedTag] = useState(null);
-  const [tagsMenuCollapsed, setTagsMenuCollapsed] = useState(false);
+  const [tagsMenuCollapsed, setTagsMenuCollapsed] = useState(true);
   const projects = useProjects();
 
   // Get unique tags from all projects
@@ -157,6 +157,48 @@ const Homepage = () => {
     );
     return [...new Set(allTags)];
   }, [projects]);
+
+  // Define TABS constant before using it in useEffect
+  const TABS = ["projects"]; // TODO Re-add: "templates", "writing", "about"
+
+  // Parse URL hash for deep linking
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.substring(1); // Remove the '#'
+      if (hash) {
+        const [tab, tag] = hash.split("/");
+
+        // Set active tab if valid
+        if (TABS.includes(tab)) {
+          setActiveTab(tab);
+        }
+
+        // Set selected tag if provided and exists
+        if (tag && uniqueTags.includes(tag)) {
+          setSelectedTag(tag);
+        } else if (!tag) {
+          // Clear tag filter if no tag in hash
+          setSelectedTag(null);
+        }
+      }
+    };
+
+    // Initial hash parsing
+    handleHashChange();
+
+    // Listen for hash changes
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, [uniqueTags, TABS]);
+
+  // Update URL hash when tab or tag changes
+  useEffect(() => {
+    let newHash = activeTab;
+    if (selectedTag) {
+      newHash += `/${selectedTag}`;
+    }
+    window.location.hash = newHash;
+  }, [activeTab, selectedTag]);
 
   // Filter projects by selected tag
   const filteredProjects = React.useMemo(() => {
@@ -181,7 +223,6 @@ const Homepage = () => {
       ],
     });
   };
-  const TABS = ["projects"]; // TODO Re-add: "templates", "writing", "about"
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-900 via-fuchsia-900 to-rose-900 pt-12">
@@ -233,7 +274,7 @@ const Homepage = () => {
               {/* Tags sub-menu with toggle */}
               <div className="mb-6 relative">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-white font-medium">Filter by tags</h3>
+                  <h3 className="text-white font-medium"></h3>
                   <button
                     onClick={() => setTagsMenuCollapsed(!tagsMenuCollapsed)}
                     className="text-white/60 hover:text-white"
