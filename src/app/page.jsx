@@ -52,10 +52,10 @@ const skills = [
 ];
 
 const careerTimeline = [
-  { period: '2020 - Present', role: 'Senior Frontend Engineer at XYZ Corp' },
-  { period: '2017 - 2020', role: 'UI/UX Designer at ABC Studio' },
-  { period: '2015 - 2017', role: 'Technical Writer at DocumentationPro' },
-]
+  { period: "2020 - Present", role: "Senior Frontend Engineer at XYZ Corp" },
+  { period: "2017 - 2020", role: "UI/UX Designer at ABC Studio" },
+  { period: "2015 - 2017", role: "Technical Writer at DocumentationPro" },
+];
 
 const SkillBar = ({ skill }) => (
   <div className="mb-4">
@@ -83,14 +83,15 @@ const ProjectModal = ({ project, onClose }) => (
             </DialogTitle>
             <div className="flex gap-2">
               {project?.tags.map((tag) => {
-
-                return (<Badge
-                  key={tag}
-                  variant="secondary"
-                  className="bg-white/10 text-white"
-                >
-                  {tag}
-                </Badge>)
+                return (
+                  <Badge
+                    key={tag}
+                    variant="secondary"
+                    className="bg-white/10 text-white"
+                  >
+                    {tag}
+                  </Badge>
+                );
               })}
             </div>
           </div>
@@ -137,7 +138,7 @@ const ProjectModal = ({ project, onClose }) => (
   </Dialog>
 );
 
-import {useProjects} from "./project-provider";
+import { useProjects } from "./project-provider";
 const Homepage = () => {
   const [activeTab, setActiveTab] = useState("projects");
   const [selectedProject, setSelectedProject] = useState(null);
@@ -145,7 +146,31 @@ const Homepage = () => {
   const [text, setText] = useState("");
   const [feedback, setFeedback] = useState(null);
   const [isReading] = useState(false);
+  const [selectedTag, setSelectedTag] = useState(null);
+  const [tagsMenuCollapsed, setTagsMenuCollapsed] = useState(false);
   const projects = useProjects();
+
+  // Get unique tags from all projects
+  const uniqueTags = React.useMemo(() => {
+    const allTags = projects.flatMap((project) =>
+      project.tags.map((tag) => (typeof tag === "object" ? tag.value : tag))
+    );
+    return [...new Set(allTags)];
+  }, [projects]);
+
+  // Filter projects by selected tag
+  const filteredProjects = React.useMemo(() => {
+    if (!selectedTag) return projects;
+
+    return projects.filter((project) =>
+      project.tags.some((tag) =>
+        typeof tag === "object"
+          ? tag.value === selectedTag
+          : tag === selectedTag
+      )
+    );
+  }, [projects, selectedTag]);
+
   const handleWritingAnalysis = (e) => {
     e.preventDefault();
     setFeedback({
@@ -204,62 +229,125 @@ const Homepage = () => {
         <div className="space-y-8">
           {/* Work Section */}
           {activeTab === "projects" && (
-            <div className="grid md:grid-cols-2 gap-6">
-              {projects.map((project, index) => (
-                <div
-                  key={index}
-                  // onClick={() => setSelectedProject(project)}
-                  className="group relative bg-white/5 hover:bg-white/10 backdrop-blur-lg rounded-2xl p-8 pb-2 text-left transition-all duration-300 border border-white/10 hover:border-white/30 cursor-pointer"
-                >
-                  <div className="flex justify-between items-start mb-4">
-                    {typeTransformations[project.type]}
-                    {project.type === "code" && (
-                      <Code className="w-6 h-6 text-blue-400" />
-                    )}
-                    {project.type === "design" && (
-                      <Palette className="w-6 h-6 text-rose-400" />
-                    )}
+            <div>
+              {/* Tags sub-menu with toggle */}
+              <div className="mb-6 relative">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-white font-medium">Filter by tags</h3>
+                  <button
+                    onClick={() => setTagsMenuCollapsed(!tagsMenuCollapsed)}
+                    className="text-white/60 hover:text-white"
+                  >
+                    {tagsMenuCollapsed ? "Show filters" : "Hide filters"}
+                  </button>
+                </div>
 
+                {!tagsMenuCollapsed && (
+                  <div className="w-full">
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => setSelectedTag(null)}
+                        className={`px-4 py-2 rounded-full transition ${
+                          !selectedTag
+                            ? "bg-white text-violet-900"
+                            : "text-white hover:bg-white/20"
+                        }`}
+                      >
+                        All
+                      </button>
+                      {uniqueTags.map((tag) => {
+                        const TAG = tagTransformations[tag];
+                        return TAG ? (
+                          <button
+                            key={tag}
+                            onClick={() => setSelectedTag(tag)}
+                            className={`px-4 py-2 rounded-full transition flex items-center gap-2 ${
+                              selectedTag === tag
+                                ? "bg-white text-violet-900"
+                                : `${TAG.bg} ${TAG.color}`
+                            }`}
+                          >
+                            {TAG.icon}
+                            {TAG.text}
+                          </button>
+                        ) : (
+                          <button
+                            key={tag}
+                            onClick={() => setSelectedTag(tag)}
+                            className={`px-4 py-2 rounded-full transition ${
+                              selectedTag === tag
+                                ? "bg-white text-violet-900"
+                                : "text-white hover:bg-white/20"
+                            }`}
+                          >
+                            {tag.charAt(0).toUpperCase() + tag.slice(1)}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">
-                    {project.title}
-                  </h3>
-                  <p className="text-white/80 mb-6">{project?.content}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.map(({label, value }, index) => {
-                      if (tagTransformations[value]) {
-                        const TAG = tagTransformations[value]
+                )}
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {filteredProjects.map((project, index) => (
+                  <div
+                    key={index}
+                    // onClick={() => setSelectedProject(project)}
+                    className="group relative bg-white/5 hover:bg-white/10 backdrop-blur-lg rounded-2xl p-8 pb-2 text-left transition-all duration-300 border border-white/10 hover:border-white/30 cursor-pointer"
+                  >
+                    <div className="flex justify-between items-start mb-4">
+                      {typeTransformations[project.type]}
+                      {project.type === "code" && (
+                        <Code className="w-6 h-6 text-blue-400" />
+                      )}
+                      {project.type === "design" && (
+                        <Palette className="w-6 h-6 text-rose-400" />
+                      )}
+                    </div>
+                    <h3 className="text-xl font-semibold text-white mb-2">
+                      {project.title}
+                    </h3>
+                    <p className="text-white/80 mb-6">{project?.content}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags.map(({ label, value }, index) => {
+                        if (tagTransformations[value]) {
+                          const TAG = tagTransformations[value];
+                          return (
+                            <Badge
+                              key={index}
+                              variant="secondary"
+                              className={`flex flex-row gap-2 ${TAG.bg} ${TAG.color}`}
+                            >
+                              {TAG.icon}
+                              {TAG.text}
+                            </Badge>
+                          );
+                        }
                         return (
                           <Badge
                             key={index}
                             variant="secondary"
-                            className={`flex flex-row gap-2 ${TAG.bg} ${TAG.color}`}
+                            className="bg-white/10 text-white"
                           >
-                            {TAG.icon}
-                            {TAG.text}
+                            {label}
                           </Badge>
-                        )
-                      }
-                    return <Badge
-                        key={index}
-                        variant="secondary"
-                        className="bg-white/10 text-white"
-                      >
-                        {label}
-                      </Badge>})}
-                  </div>
-                  <div className="flex flex-wrap gap-2 pt-4 pb-4 justify-end text-white/0 transition-all duration-300 group-hover:text-white/100">
-                    {project.video && (
-                      <a href={project.video} target="_blank"  >
-                        <Video className="w-6 h-6 text-sm flex items-center gap-2" />
+                        );
+                      })}
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-4 pb-4 justify-end text-white/0 transition-all duration-300 group-hover:text-white/100">
+                      {project.video && (
+                        <a href={project.video} target="_blank">
+                          <Video className="w-6 h-6 text-sm flex items-center gap-2" />
+                        </a>
+                      )}
+                      <a href={project.url} target="_blank">
+                        <ArrowRight className="w-6 h-6" />
                       </a>
-                    )}
-                    <a href={project.url} target="_blank" >
-                      <ArrowRight className="w-6 h-6" />
-                    </a>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           )}
 
@@ -408,12 +496,16 @@ const Homepage = () => {
               </div>
 
               <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-8">
-                <h3 className="text-xl font-bold text-white mb-6">Career Timeline</h3>
+                <h3 className="text-xl font-bold text-white mb-6">
+                  Career Timeline
+                </h3>
                 <div className="space-y-6 relative before:absolute before:left-2 before:top-2 before:h-[calc(100%-20px)] before:w-0.5 before:bg-gradient-to-b before:from-violet-400 before:to-rose-400">
                   {careerTimeline.map((item, index) => (
                     <div key={index} className="pl-8 relative">
                       <div className="absolute left-0 top-2 w-4 h-4 rounded-full bg-violet-400 shadow-lg shadow-violet-400/50" />
-                      <p className="text-violet-400 font-semibold">{item.period}</p>
+                      <p className="text-violet-400 font-semibold">
+                        {item.period}
+                      </p>
                       <p className="text-white/80">{item.role}</p>
                     </div>
                   ))}

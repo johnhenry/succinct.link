@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-import { Provider } from "./project-provider"
-import {  getDocuments } from 'outstatic/server';
-
+import { ProjectProvider } from "./project-provider";
+import { DemoProvider } from "./demo-provider";
+import { getDocuments } from "outstatic/server";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,7 +15,26 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const projects = await getDocuments("projects", ['title', 'url', 'video', 'type', 'tags', 'metrics', 'content', 'color']);
+  const projects = await getDocuments("projects", [
+    "title",
+    "url",
+    "video",
+    "type",
+    "tags",
+    "metrics",
+    "content",
+    "color",
+  ]);
+  const demos = await getDocuments("demos", [
+    "title",
+    "url",
+    "video",
+    "type",
+    "tags",
+    "metrics",
+    "content",
+    "color",
+  ]);
   return (
     <html lang="en">
       <head>
@@ -24,9 +43,9 @@ export default async function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <Provider value={projects}>
+      <ProjectProvider value={projects}>
         <body>{children}</body>
-      </Provider>
+      </ProjectProvider>
     </html>
   );
 }

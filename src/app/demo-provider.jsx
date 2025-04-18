@@ -3,10 +3,10 @@
 
 import { createContext, useContext } from "react";
 const Context = createContext([]);
-const ProjectProvider = ({ children, value }) => {
+const DemoProvider = ({ children, value }) => {
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };
-const useProjects = () => {
+const useDemos = () => {
   return useContext(Context);
 };
-export { ProjectProvider, useProjects };
+export { DemoProvider, useDemos };
