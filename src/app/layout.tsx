@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { ProjectProvider } from "./project-provider";
-import { DemoProvider } from "./demo-provider";
 import { getDocuments } from "outstatic/server";
 
 export const metadata: Metadata = {
