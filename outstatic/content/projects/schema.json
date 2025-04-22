@@ -71,12 +71,12 @@
           "label": "::deno::"
         },
         {
-          "value": "Chrome",
-          "label": "Chrome"
+          "value": "::chrome::",
+          "label": "::extension::"
         },
         {
-          "value": "Extension",
-          "label": "Extension"
+          "value": "::extension::",
+          "label": "::extension::"
         },
         {
           "value": "::mcp::",
