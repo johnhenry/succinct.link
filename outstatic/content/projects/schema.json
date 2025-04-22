@@ -77,6 +77,14 @@
         {
           "value": "Extension",
           "label": "Extension"
+        },
+        {
+          "value": "::mcp::",
+          "label": "::mcp::"
+        },
+        {
+          "value": "::ai::",
+          "label": "::ai::"
         }
       ]
     },
