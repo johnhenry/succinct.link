@@ -28,6 +28,11 @@ export default async function RootLayout({
     <html lang="en">
       <head>
         <link
+          rel="icon"
+          href="https://johnhenry.github.io/image/iajh.png"
+          type="image/png"
+        ></link>
+        <link
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet"
         />

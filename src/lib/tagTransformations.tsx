@@ -81,7 +81,7 @@ const tagTransformations = {
     text: "Deno",
   },
   "::extension::": {
-    icon: <Deno className={sizing} />,
+    icon: <IoExtensionPuzzleOutline className={sizing} />,
     color: "text-orange-400",
     bg: "bg-orange-400/10",
     text: "Deno",
@@ -97,12 +97,6 @@ const tagTransformations = {
     color: "text-orange-400",
     bg: "bg-orange-400/10",
     text: "Deno",
-  },
-  "::extension::": {
-    icon: <IoExtensionPuzzleOutline className={sizing} />,
-    color: "text-orange-400",
-    bg: "bg-orange-400/10",
-    text: "Plugin",
   },
 };
 export default tagTransformations;
