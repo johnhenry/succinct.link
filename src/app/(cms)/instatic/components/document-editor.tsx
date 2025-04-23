@@ -1,62 +1,68 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Img from 'next/image'
+import { useState } from "react";
+import Img from "next/image";
 interface Author {
-  name: string
-  picture: string
+  name: string;
+  picture: string;
 }
 
 interface Tag {
-  label: string
-  value: string
+  label: string;
+  value: string;
 }
 
 interface Document {
-  title: string
-  content: string
-  status: 'draft' | 'published'
-  url?: string
-  video?: string
-  type: '::code::' | '::app::' | '::library::'
-  color: 'rose' | 'blue' | 'green'
-  slug: string
-  publishedAt?: string
-  updatedAt?: string
-  tags: Tag[]
-  author: Author
-  coverImage?: string
+  title: string;
+  content: string;
+  status: "draft" | "published";
+  url?: string;
+  video?: string;
+  type: "::code::" | "::app::" | "::library::" | "::design::";
+  color: "rose" | "blue" | "green";
+  slug: string;
+  publishedAt?: string;
+  updatedAt?: string;
+  tags: Tag[];
+  author: Author;
+  coverImage?: string;
 }
 
 interface DocumentEditorProps {
-  document: Document
-  onSave: (doc: Document) => Promise<void>
+  document: Document;
+  onSave: (doc: Document) => Promise<void>;
 }
 
-function TagEditor({ tags, onChange }: { tags: Tag[], onChange: (tags: Tag[]) => void }) {
-  const [input, setInput] = useState('')
+function TagEditor({
+  tags,
+  onChange,
+}: {
+  tags: Tag[];
+  onChange: (tags: Tag[]) => void;
+}) {
+  const [input, setInput] = useState("");
 
   const addTag = () => {
     if (input.trim()) {
-      const value = `::${input.trim().toLowerCase().replace(/\s+/g, '-')}::`
-      const newTag = { label: value, value }
-      onChange([...tags, newTag])
-      setInput('')
+      const value = `::${input.trim().toLowerCase().replace(/\s+/g, "-")}::`;
+      const newTag = { label: value, value };
+      onChange([...tags, newTag]);
+      setInput("");
     }
-  }
+  };
 
   const removeTag = (index: number) => {
-    const newTags = [...tags]
-    newTags.splice(index, 1)
-    onChange(newTags)
-  }
+    const newTags = [...tags];
+    newTags.splice(index, 1);
+    onChange(newTags);
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      addTag()
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addTag();
     }
-  }
+  };
 
   return (
     <div className="space-y-2">
@@ -93,66 +99,73 @@ function TagEditor({ tags, onChange }: { tags: Tag[], onChange: (tags: Tag[]) =>
         </button>
       </div>
     </div>
-  )
+  );
 }
 
 export function DocumentEditor({ document, onSave }: DocumentEditorProps) {
   const [formData, setFormData] = useState<Document>({
     ...document,
     tags: document.tags || [],
-    author: document.author || { name: '', picture: '' },
-    title: document.title || '',
-    content: document.content || '',
-    status: document.status || 'draft',
-    type: document.type || '::app::',
-    color: document.color || 'rose',
-    slug: document.slug || '',
-    url: document.url || '',
-    video: document.video || '',
-    coverImage: document.coverImage || ''
-  })
-  const [saving, setSaving] = useState(false)
+    author: document.author || { name: "", picture: "" },
+    title: document.title || "",
+    content: document.content || "",
+    status: document.status || "draft",
+    type: document.type || "::app::",
+    color: document.color || "rose",
+    slug: document.slug || "",
+    url: document.url || "",
+    video: document.video || "",
+    coverImage: document.coverImage || "",
+  });
+  const [saving, setSaving] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSaving(true)
+    e.preventDefault();
+    setSaving(true);
     try {
       await onSave({
         ...formData,
-        status: 'published'
-      })
+        status: "published",
+      });
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   const handleSaveAsDraft = async () => {
-    setSaving(true)
+    setSaving(true);
     try {
       await onSave({
         ...formData,
-        status: 'draft'
-      })
+        status: "draft",
+      });
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl font-semibold mb-8">{formData.title || 'New Project'}</h1>
+          <h1 className="text-2xl font-semibold mb-8">
+            {formData.title || "New Project"}
+          </h1>
           <div className="flex justify-between items-center mb-4">
             <div className="space-y-1">
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Title
               </label>
               <input
                 type="text"
                 id="title"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
               />
             </div>
@@ -160,27 +173,37 @@ export function DocumentEditor({ document, onSave }: DocumentEditorProps) {
 
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-1">
-              <label htmlFor="url" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="url"
+                className="block text-sm font-medium text-gray-700"
+              >
                 URL
               </label>
               <input
                 type="text"
                 id="url"
                 value={formData.url}
-                onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, url: e.target.value })
+                }
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
               />
             </div>
 
             <div className="space-y-1">
-              <label htmlFor="video" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="video"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Video URL
               </label>
               <input
                 type="text"
                 id="video"
                 value={formData.video}
-                onChange={(e) => setFormData({ ...formData, video: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, video: e.target.value })
+                }
                 className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
               />
             </div>
@@ -228,14 +251,19 @@ export function DocumentEditor({ document, onSave }: DocumentEditorProps) {
         </div>
 
         <div className="space-y-1">
-          <label htmlFor="content" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="content"
+            className="block text-sm font-medium text-gray-700"
+          >
             Content
           </label>
           <textarea
             id="content"
             rows={8}
             value={formData.content}
-            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, content: e.target.value })
+            }
             className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
           />
         </div>
@@ -257,17 +285,17 @@ export function DocumentEditor({ document, onSave }: DocumentEditorProps) {
             disabled={saving}
             className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
           >
-            {saving ? 'Saving...' : 'Save as Draft'}
+            {saving ? "Saving..." : "Save as Draft"}
           </button>
           <button
             type="submit"
             disabled={saving}
             className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 disabled:opacity-50"
           >
-            {saving ? 'Saving...' : 'Publish'}
+            {saving ? "Saving..." : "Publish"}
           </button>
         </div>
       </div>
     </form>
-  )
+  );
 }
