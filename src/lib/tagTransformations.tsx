@@ -10,6 +10,7 @@ import { RiNextjsFill as NextJS } from "react-icons/ri";
 import { FaServer } from "react-icons/fa";
 import { IoSparklesOutline } from "react-icons/io5";
 import { IoExtensionPuzzleOutline } from "react-icons/io5";
+import { SiIpfs } from "react-icons/si";
 
 const sizing = "w-4 h-4";
 
@@ -84,7 +85,7 @@ const tagTransformations = {
     icon: <IoExtensionPuzzleOutline className={sizing} />,
     color: "text-orange-400",
     bg: "bg-orange-400/10",
-    text: "Deno",
+    text: "Extension",
   },
   "::mcp::": {
     icon: <FaServer className={sizing} />,
@@ -96,7 +97,13 @@ const tagTransformations = {
     icon: <IoSparklesOutline className={sizing} />,
     color: "text-orange-400",
     bg: "bg-orange-400/10",
-    text: "Deno",
+    text: "AI",
+  },
+  "::ipfs::": {
+    icon: <SiIpfs className={sizing} />,
+    color: "text-rose-400",
+    bg: "bg-rose-400/10",
+    text: "IPFS",
   },
 };
 export default tagTransformations;

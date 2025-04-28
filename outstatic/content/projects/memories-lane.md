@@ -5,7 +5,7 @@ author:
 coverImage: ''
 title: 'Memories-Lane'
 status: 'published'
-slug: 'memoryhttps-github-com-johnhenry-memory-lane-lane'
+slug: 'memories-lane
 description: ''
 url: 'https://github.com/johnhenry/memories-lane'
 video: ''

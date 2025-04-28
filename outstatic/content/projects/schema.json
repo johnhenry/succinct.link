@@ -85,6 +85,10 @@
         {
           "value": "::ai::",
           "label": "::ai::"
+        },
+        {
+          "value": "::ipfs::",
+          "label": "::ipfs::"
         }
       ]
     },
