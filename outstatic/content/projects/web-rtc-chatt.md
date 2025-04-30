@@ -3,7 +3,7 @@ author:
   name: 'John Henry'
   picture: 'https://avatars.githubusercontent.com/u/393817?v=4'
 coverImage: ''
-title: 'Web RTC Chatt'
+title: 'Web RTC Chat'
 status: 'published'
 slug: 'web-rtc-chatt'
 description: ''
