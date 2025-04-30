@@ -10,8 +10,8 @@ description: ''
 url: 'https://astro-portfolio.succinct.link'
 video: ''
 type: '::application::'
-color: ''
-tags: ''
+tags: [{"value":"::ai::","label":"::ai::"}]
+color: 'rose'
 publishedAt: '2024-11-30T18:05:54.000Z'
 ---
 
