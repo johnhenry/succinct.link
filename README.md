@@ -1,5 +1,25 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## What this app is
+
+A CMS-admin-only app (no public homepage) for editing content that lives in the
+[johnhenry.github.io](https://github.com/johnhenry/johnhenry.github.io) repo:
+
+- **`/outstatic`** — [Outstatic](https://outstatic.com), a git-based CMS. Writes commit
+  directly to `johnhenry/johnhenry.github.io`'s `main` branch via GitHub's API
+  (`OST_REPO_SLUG`/`OST_REPO_OWNER`/`OST_REPO_BRANCH`/`OST_CONTENT_PATH` in `.env.local`).
+  Works the same locally and deployed.
+- **`/instatic`** — a custom, homegrown alternative CMS. **Local-dev-only, on purpose.**
+  It writes via Node's `fs.writeFile()` directly to this checkout's disk, not the GitHub
+  API. It only works when run via `next dev` against a real local git checkout — Vercel's
+  serverless filesystem is ephemeral/read-only in production, so Instatic's save button
+  silently no-ops in any deployed environment. Workflow: run locally, edit content, then
+  `git add`/`commit`/`push` manually.
+  - **Do not set `IST_ACTIVATED` in Vercel's Production/Preview environment variables,
+    ever.** The route (`src/app/(cms)/instatic/[[...ist]]/page.tsx`) gates on
+    `process.env.IST_ACTIVATED === 'true'` and redirects away otherwise — this is what
+    keeps it disabled in every deployed environment, as long as that var stays unset there.
+
 ## Getting Started
 
 First, run the development server:
