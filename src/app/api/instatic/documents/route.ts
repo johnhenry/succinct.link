@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server'
 import { saveDocument } from '@/app/(cms)/instatic/lib/api'
 
+// Thin HTTP shim -- all default-value logic (timestamps, tags, the
+// projects-only author shape, etc.) lives solely in saveDocument, so there's
+// one place those rules can drift, not two.
 export async function PUT(request: Request) {
   try {
     const document = await request.json()
-    const { collection = 'projects', slug, content, status, ...metadata } = document
+    const { collection = 'projects', slug, content, ...metadata } = document
 
     if (!slug) {
       return NextResponse.json(
@@ -13,25 +16,8 @@ export async function PUT(request: Request) {
       )
     }
 
-    // Update timestamps
-    const now = new Date().toISOString()
-    const updatedMetadata = {
-      ...metadata,
-      status,
-      updatedAt: now,
-      ...(status === 'published' && !metadata.publishedAt && { publishedAt: now }),
-      tags: metadata.tags || [],
-      // "projects" documents carry an author object (Outstatic's original
-      // schema); other collections (e.g. "posts") define their own author
-      // shape (a plain string) and shouldn't have this invented for them.
-      ...(collection === 'projects' && { author: metadata.author || { name: '', picture: '' } })
-    }
+    const success = await saveDocument(collection, slug, { content, ...metadata })
 
-    const success = await saveDocument(collection, slug, {
-      content,
-      ...updatedMetadata,
-    })
-    
     if (success) {
       return NextResponse.json({ success: true })
     } else {

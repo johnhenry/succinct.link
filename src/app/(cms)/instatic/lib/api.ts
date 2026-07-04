@@ -1,6 +1,7 @@
 import { readFile, writeFile, readdir, mkdir } from 'fs/promises'
 import { join } from 'path'
 import matter from 'gray-matter'
+import { slugify } from './slugify'
 
 // Instatic edits files on the local filesystem, unlike Outstatic (which
 // reads/writes via GitHub's API and can target any repo regardless of local
@@ -14,17 +15,23 @@ import matter from 'gray-matter'
 // app's own repo (Instatic's original assumption).
 const REPO_ROOT = join(process.cwd(), process.env.IST_REPO_PATH || '.')
 const CONTENT_DIR = join(REPO_ROOT, process.env.OST_CONTENT_PATH || 'outstatic/content')
+// Where uploaded cover images land, and the root-relative URL prefix used to
+// reference them -- matches how the rest of the target site's assets are
+// referenced (e.g. /vendor/img/..., /image/...), served straight out of
+// Astro's public/ directory with no build step.
+const UPLOAD_DIR = join(REPO_ROOT, 'public/image/uploads')
+const UPLOAD_URL_PREFIX = '/image/uploads'
 
 // Custom stringifier to preserve exact YAML format
 function customStringify(data: any) {
   const lines: string[] = ['---']
-  
+
   // Helper to stringify a value with proper indentation
   const stringifyValue = (value: any, indent: number = 0): string[] => {
     if (Array.isArray(value)) {
       // Special handling for tags array
       if (value[0]?.label && value[0]?.value) {
-        return [`[${value.map(item => 
+        return [`[${value.map(item =>
           `{"label":"${item.label}","value":"${item.value}"}`
         ).join(',')}]`]
       }
@@ -64,7 +71,7 @@ function customStringify(data: any) {
       lines.push(`${key}: ${formattedValue}`)
     }
   })
-  
+
   lines.push('---')
   return lines.join('\n')
 }
@@ -77,11 +84,17 @@ export async function getDocuments(collection = 'projects') {
       files.filter(file => file.endsWith('.md')).map(async (file) => {
         const content = await readFile(join(contentPath, file), 'utf-8')
         const { data, content: markdownContent } = matter(content)
-        const [firstLine] = markdownContent.split('\n')
+        // The body typically opens with a blank line right after the
+        // frontmatter's closing "---", so body.split("\n")[0] is empty --
+        // take the first *non-empty* line instead. Only used as a fallback:
+        // collections with a real `description` field (e.g. posts) keep it;
+        // this only fills in for collections that never had one (projects,
+        // where the body itself doubles as the description).
+        const firstNonEmptyLine = markdownContent.split('\n').find(line => line.trim() !== '') || ''
         return {
           ...data,
           content: markdownContent,
-          description: firstLine || '',
+          description: data.description || firstNonEmptyLine,
           slug: file.replace(/\.md$/, '')
         }
       })
@@ -105,9 +118,13 @@ export async function getCollections(): Promise<string[]> {
   }
 }
 
+// Sole place default values get applied on save -- callers (the API route)
+// should pass through whatever the editor submitted without pre-computing
+// any of these themselves, to avoid the same defaulting rules drifting out
+// of sync between two implementations.
 export async function saveDocument(collection: string, slug: string, { content, ...metadata }: any) {
   const filePath = join(CONTENT_DIR, collection, `${slug}.md`)
-  
+
   try {
     // Create collection directory if it doesn't exist
     const collectionPath = join(CONTENT_DIR, collection)
@@ -171,4 +188,23 @@ export async function saveDocument(collection: string, slug: string, { content, 
     console.error('Error saving document:', error)
     return false
   }
+}
+
+// Writes an uploaded cover image into the target repo's public/ directory
+// (served directly by Astro, no build step) and returns the root-relative
+// URL to reference it by. `collection` namespaces the upload subdirectory
+// only to keep uploads from different collections visually organized --
+// it has no bearing on where the resulting document file itself lives.
+export async function uploadImage(collection: string, filename: string, dataBase64: string) {
+  const dir = join(UPLOAD_DIR, collection)
+  await mkdir(dir, { recursive: true })
+
+  const ext = filename.includes('.') ? filename.slice(filename.lastIndexOf('.')) : ''
+  const base = slugify(filename.slice(0, filename.length - ext.length)) || 'upload'
+  // Timestamp prefix avoids collisions between different uploads that
+  // happen to share a sanitized base name.
+  const finalName = `${Date.now()}-${base}${ext.toLowerCase()}`
+
+  await writeFile(join(dir, finalName), Buffer.from(dataBase64, 'base64'))
+  return `${UPLOAD_URL_PREFIX}/${collection}/${finalName}`
 }
