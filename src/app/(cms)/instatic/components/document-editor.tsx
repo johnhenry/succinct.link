@@ -34,9 +34,12 @@ interface Document {
 }
 
 interface DocumentEditorProps {
-  document: Document;
+  // Callers only ever pass a partial shape (a brand-new document starts as
+  // just `{ status: 'draft' }`) -- this component fills in the rest.
+  document: Partial<Document>;
   collection?: string;
   onSave: (doc: Document) => Promise<void>;
+  onCancel: () => void;
 }
 
 function TagEditor({
@@ -177,7 +180,7 @@ function StringTagEditor({
   );
 }
 
-export function DocumentEditor({ document, collection = "projects", onSave }: DocumentEditorProps) {
+export function DocumentEditor({ document, collection = "projects", onSave, onCancel }: DocumentEditorProps) {
   const isPosts = collection === "posts";
 
   const [formData, setFormData] = useState<Document>({
@@ -206,6 +209,43 @@ export function DocumentEditor({ document, collection = "projects", onSave }: Do
         }),
   });
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const handleCoverUpload = async (file: File) => {
+    setUploadError(null);
+    setUploading(true);
+    try {
+      const dataBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          // reader.result is "data:<mime>;base64,<data>" -- keep just the data.
+          const result = reader.result as string;
+          resolve(result.slice(result.indexOf(",") + 1));
+        };
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+      });
+
+      const response = await fetch("/api/instatic/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ collection, filename: file.name, dataBase64 }),
+      });
+
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}));
+        throw new Error(body.error || "Upload failed");
+      }
+
+      const { url } = await response.json();
+      setFormData((prev) => ({ ...prev, coverImage: url }));
+    } catch (error) {
+      setUploadError(error instanceof Error ? error.message : "Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -462,20 +502,27 @@ export function DocumentEditor({ document, collection = "projects", onSave }: Do
                   htmlFor="cover-upload"
                   className="relative cursor-pointer bg-white rounded-md font-medium text-black hover:text-gray-700 focus-within:outline-none"
                 >
-                  <span>Upload a file</span>
+                  <span>{uploading ? "Uploading..." : "Upload a file"}</span>
                   <input
                     id="cover-upload"
                     name="cover-upload"
                     type="file"
+                    accept="image/*"
+                    disabled={uploading}
                     className="sr-only"
                     onChange={(e) => {
-                      if (e.target.files?.[0]) {
-                        // Handle file upload here
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        handleCoverUpload(file);
                       }
+                      e.target.value = ""; // allow re-selecting the same file later
                     }}
                   />
                 </label>
               </div>
+              {uploadError && (
+                <p className="text-sm text-red-600">{uploadError}</p>
+              )}
             </div>
           </div>
         </div>
@@ -516,6 +563,14 @@ export function DocumentEditor({ document, collection = "projects", onSave }: Do
         </div>
 
         <div className="flex justify-end space-x-4">
+          <button
+            type="button"
+            onClick={onCancel}
+            disabled={saving}
+            className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 disabled:opacity-50"
+          >
+            Cancel
+          </button>
           <button
             type="button"
             onClick={handleSaveAsDraft}

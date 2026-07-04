@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { DocumentEditor } from './document-editor';
 import Link from 'next/link';
+import { slugify } from '../lib/slugify';
 
 interface Collection {
   name: string
@@ -18,12 +19,14 @@ interface InstaticClientProps {
 export function InstaticClient({ initialData, collections, currentCollection }: InstaticClientProps) {
   const [currentDocument, setCurrentDocument] = useState<null|any>(null)
   const [documents, setDocuments] = useState(initialData)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   const handleSave = async (doc: any) => {
+    setSaveError(null)
     try {
       // Generate a slug if it doesn't exist
-      const slug = doc.slug || doc.title?.toLowerCase().replace(/\s+/g, '-') || new Date().getTime().toString()
-      
+      const slug = doc.slug || slugify(doc.title || '') || Date.now().toString()
+
       const response = await fetch('/api/instatic/documents', {
         method: 'PUT',
         headers: {
@@ -37,24 +40,25 @@ export function InstaticClient({ initialData, collections, currentCollection }: 
       })
 
       if (!response.ok) {
-        throw new Error('Failed to save document')
+        const body = await response.json().catch(() => ({}))
+        throw new Error(body.error || 'Failed to save document')
       }
 
       // Refresh the documents list
-      const updatedDocs = documents.map(d => 
+      const updatedDocs = documents.map(d =>
         d.slug === slug ? { ...doc, slug } : d
       )
-      
+
       // If it's a new document, add it to the list
       if (!documents.find(d => d.slug === slug)) {
         updatedDocs.push({ ...doc, slug })
       }
-      
+
       setDocuments(updatedDocs)
       setCurrentDocument(null) // Return to list view after save
     } catch (error) {
       console.error('Error saving document:', error)
-      throw error
+      setSaveError(error instanceof Error ? error.message : 'Failed to save document')
     }
   }
 
@@ -129,19 +133,28 @@ export function InstaticClient({ initialData, collections, currentCollection }: 
               <>
                 <div className="flex justify-between items-center mb-8">
                   <h2 className="text-2xl font-semibold">{currentCollection}</h2>
-                  <button 
-                    className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
-                    onClick={() => setCurrentDocument({ status: 'draft' })}
-                  >
-                    New {currentCollection.slice(0, -1)}
-                  </button>
+                  {!currentDocument && (
+                    <button
+                      className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
+                      onClick={() => { setSaveError(null); setCurrentDocument({ status: 'draft' }) }}
+                    >
+                      New {currentCollection.slice(0, -1)}
+                    </button>
+                  )}
                 </div>
-                
+
+                {saveError && (
+                  <div className="mb-4 rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                    {saveError}
+                  </div>
+                )}
+
                 {currentDocument ? (
                   <DocumentEditor
                     document={currentDocument}
                     collection={currentCollection}
                     onSave={handleSave}
+                    onCancel={() => { setSaveError(null); setCurrentDocument(null) }}
                   />
                 ) : documents.length === 0 ? (
                   <div className="text-center py-12">
@@ -155,7 +168,7 @@ export function InstaticClient({ initialData, collections, currentCollection }: 
                       Create your first {currentCollection.slice(0, -1)} by clicking the button below.
                     </p>
                     <button
-                      onClick={() => setCurrentDocument({ status: 'draft' })}
+                      onClick={() => { setSaveError(null); setCurrentDocument({ status: 'draft' }) }}
                       className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
                     >
                       Create {currentCollection.slice(0, -1)}
@@ -175,7 +188,7 @@ export function InstaticClient({ initialData, collections, currentCollection }: 
                         <div 
                           key={doc.slug}
                           className="px-6 py-4 hover:bg-gray-50 cursor-pointer"
-                          onClick={() => setCurrentDocument(doc)}
+                          onClick={() => { setSaveError(null); setCurrentDocument(doc) }}
                         >
                           <div className="grid grid-cols-12 gap-4 items-center">
                             <div className="col-span-6 font-medium">{doc.title}</div>
