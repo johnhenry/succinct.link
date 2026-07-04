@@ -15,7 +15,7 @@ export default function RootLayout({ children }: {children:ReactNode}) {
             rel="stylesheet"
           />
         </head>
-        <body>{children}</body>
+        <body id="outstatic">{children}</body>
       </html>
     )
   }

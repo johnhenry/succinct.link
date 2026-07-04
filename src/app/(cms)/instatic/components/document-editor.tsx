@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Img from "next/image";
 interface Author {
   name: string;
   picture: string;
@@ -16,20 +15,27 @@ interface Document {
   title: string;
   content: string;
   status: "draft" | "published";
-  url?: string;
-  video?: string;
-  type: "::code::" | "::app::" | "::library::" | "::design::";
-  color: "rose" | "blue" | "green";
   slug: string;
   publishedAt?: string;
   updatedAt?: string;
-  tags: Tag[];
-  author: Author;
   coverImage?: string;
+  // "projects" collection fields
+  url?: string;
+  video?: string;
+  type?: "::code::" | "::app::" | "::library::" | "::design::";
+  color?: "rose" | "blue" | "green";
+  tags?: Tag[] | string[];
+  author?: Author | string;
+  // "posts" collection fields
+  description?: string;
+  date?: string;
+  heroImage?: string;
+  alt?: string;
 }
 
 interface DocumentEditorProps {
   document: Document;
+  collection?: string;
   onSave: (doc: Document) => Promise<void>;
 }
 
@@ -102,20 +108,102 @@ function TagEditor({
   );
 }
 
-export function DocumentEditor({ document, onSave }: DocumentEditorProps) {
+// "posts" tags are plain strings (unlike "projects"' {label,value} pairs) --
+// matches src/content/config.ts's `tags: z.array(z.string())` for posts.
+function StringTagEditor({
+  tags,
+  onChange,
+}: {
+  tags: string[];
+  onChange: (tags: string[]) => void;
+}) {
+  const [input, setInput] = useState("");
+
+  const addTag = () => {
+    if (input.trim()) {
+      onChange([...tags, input.trim()]);
+      setInput("");
+    }
+  };
+
+  const removeTag = (index: number) => {
+    const newTags = [...tags];
+    newTags.splice(index, 1);
+    onChange(newTags);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addTag();
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      <div className="flex flex-wrap gap-2 mb-2">
+        {tags.map((tag, index) => (
+          <span
+            key={index}
+            className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 rounded text-sm"
+          >
+            {tag}
+            <button
+              onClick={() => removeTag(index)}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              ×
+            </button>
+          </span>
+        ))}
+      </div>
+      <div className="flex gap-2">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Add a tag and press Enter"
+          className="flex-1 border rounded p-2"
+        />
+        <button
+          onClick={addTag}
+          className="px-4 py-2 bg-gray-100 rounded hover:bg-gray-200"
+        >
+          Add
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export function DocumentEditor({ document, collection = "projects", onSave }: DocumentEditorProps) {
+  const isPosts = collection === "posts";
+
   const [formData, setFormData] = useState<Document>({
     ...document,
-    tags: document.tags || [],
-    author: document.author || { name: "", picture: "" },
     title: document.title || "",
     content: document.content || "",
     status: document.status || "draft",
-    type: document.type || "::app::",
-    color: document.color || "rose",
     slug: document.slug || "",
-    url: document.url || "",
-    video: document.video || "",
     coverImage: document.coverImage || "",
+    ...(isPosts
+      ? {
+          tags: (document.tags as string[]) || [],
+          author: (document.author as string) || "John Henry",
+          description: document.description || "",
+          date: document.date || "",
+          heroImage: document.heroImage || "",
+          alt: document.alt || "",
+        }
+      : {
+          tags: (document.tags as Tag[]) || [],
+          author: (document.author as Author) || { name: "", picture: "" },
+          type: document.type || "::app::",
+          color: document.color || "rose",
+          url: document.url || "",
+          video: document.video || "",
+        }),
   });
   const [saving, setSaving] = useState(false);
 
@@ -149,7 +237,7 @@ export function DocumentEditor({ document, onSave }: DocumentEditorProps) {
       <div className="space-y-8">
         <div>
           <h1 className="text-2xl font-semibold mb-8">
-            {formData.title || "New Project"}
+            {formData.title || (isPosts ? "New Post" : "New Project")}
           </h1>
           <div className="flex justify-between items-center mb-4">
             <div className="space-y-1">
@@ -171,43 +259,181 @@ export function DocumentEditor({ document, onSave }: DocumentEditorProps) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
-            <div className="space-y-1">
-              <label
-                htmlFor="url"
-                className="block text-sm font-medium text-gray-700"
-              >
-                URL
-              </label>
-              <input
-                type="text"
-                id="url"
-                value={formData.url}
-                onChange={(e) =>
-                  setFormData({ ...formData, url: e.target.value })
-                }
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
-              />
-            </div>
+          {isPosts ? (
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-1">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Description
+                </label>
+                <input
+                  type="text"
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                />
+              </div>
 
-            <div className="space-y-1">
-              <label
-                htmlFor="video"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Video URL
-              </label>
-              <input
-                type="text"
-                id="video"
-                value={formData.video}
-                onChange={(e) =>
-                  setFormData({ ...formData, video: e.target.value })
-                }
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
-              />
+              <div className="space-y-1">
+                <label
+                  htmlFor="date"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Date
+                </label>
+                <input
+                  type="text"
+                  id="date"
+                  placeholder="e.g. 4 July 2026"
+                  value={formData.date}
+                  onChange={(e) =>
+                    setFormData({ ...formData, date: e.target.value })
+                  }
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label
+                  htmlFor="heroImage"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Hero Image URL
+                </label>
+                <input
+                  type="text"
+                  id="heroImage"
+                  value={formData.heroImage}
+                  onChange={(e) =>
+                    setFormData({ ...formData, heroImage: e.target.value })
+                  }
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label
+                  htmlFor="alt"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Hero Image Alt Text
+                </label>
+                <input
+                  type="text"
+                  id="alt"
+                  value={formData.alt}
+                  onChange={(e) =>
+                    setFormData({ ...formData, alt: e.target.value })
+                  }
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                />
+              </div>
+
+              <div className="space-y-1 col-span-2">
+                <label
+                  htmlFor="author"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Author
+                </label>
+                <input
+                  type="text"
+                  id="author"
+                  value={formData.author as string}
+                  onChange={(e) =>
+                    setFormData({ ...formData, author: e.target.value })
+                  }
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-1">
+                <label
+                  htmlFor="url"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  URL
+                </label>
+                <input
+                  type="text"
+                  id="url"
+                  value={formData.url}
+                  onChange={(e) =>
+                    setFormData({ ...formData, url: e.target.value })
+                  }
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label
+                  htmlFor="video"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Video URL
+                </label>
+                <input
+                  type="text"
+                  id="video"
+                  value={formData.video}
+                  onChange={(e) =>
+                    setFormData({ ...formData, video: e.target.value })
+                  }
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label
+                  htmlFor="type"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Type
+                </label>
+                <select
+                  id="type"
+                  value={formData.type}
+                  onChange={(e) =>
+                    setFormData({ ...formData, type: e.target.value as Document["type"] })
+                  }
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                >
+                  <option value="::app::">App</option>
+                  <option value="::code::">Code</option>
+                  <option value="::library::">Library</option>
+                  <option value="::design::">Design</option>
+                </select>
+              </div>
+
+              <div className="space-y-1">
+                <label
+                  htmlFor="color"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Color
+                </label>
+                <select
+                  id="color"
+                  value={formData.color}
+                  onChange={(e) =>
+                    setFormData({ ...formData, color: e.target.value as Document["color"] })
+                  }
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
+                >
+                  <option value="rose">Rose</option>
+                  <option value="blue">Blue</option>
+                  <option value="green">Green</option>
+                </select>
+              </div>
+            </div>
+          )}
         </div>
 
         <div>
@@ -217,7 +443,11 @@ export function DocumentEditor({ document, onSave }: DocumentEditorProps) {
           <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
             <div className="space-y-1 text-center">
               {formData.coverImage ? (
-                <Img
+                // Admin preview thumbnail for an arbitrary CMS-supplied URL,
+                // not a public-facing perf-critical image -- avoids next/image's
+                // required width/height.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
                   src={formData.coverImage}
                   alt="Cover"
                   className="mx-auto h-32 w-auto object-cover"
@@ -272,10 +502,17 @@ export function DocumentEditor({ document, onSave }: DocumentEditorProps) {
           <label className="block text-sm font-medium text-gray-700">
             Tags
           </label>
-          <TagEditor
-            tags={formData.tags}
-            onChange={(tags) => setFormData({ ...formData, tags })}
-          />
+          {isPosts ? (
+            <StringTagEditor
+              tags={(formData.tags as string[]) || []}
+              onChange={(tags) => setFormData({ ...formData, tags })}
+            />
+          ) : (
+            <TagEditor
+              tags={(formData.tags as Tag[]) || []}
+              onChange={(tags) => setFormData({ ...formData, tags })}
+            />
+          )}
         </div>
 
         <div className="flex justify-end space-x-4">

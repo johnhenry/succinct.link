@@ -140,6 +140,7 @@ export function InstaticClient({ initialData, collections, currentCollection }: 
                 {currentDocument ? (
                   <DocumentEditor
                     document={currentDocument}
+                    collection={currentCollection}
                     onSave={handleSave}
                   />
                 ) : documents.length === 0 ? (

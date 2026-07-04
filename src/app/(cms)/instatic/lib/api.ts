@@ -2,7 +2,18 @@ import { readFile, writeFile, readdir, mkdir } from 'fs/promises'
 import { join } from 'path'
 import matter from 'gray-matter'
 
-const CONTENT_DIR = join(process.cwd(), 'outstatic/content')
+// Instatic edits files on the local filesystem, unlike Outstatic (which
+// reads/writes via GitHub's API and can target any repo regardless of local
+// checkout layout). OST_CONTENT_PATH is a path *within the target repo's
+// git tree* from Outstatic's perspective -- reused here for the content
+// subdirectory name, but resolved against a *local checkout* of that same
+// repo, which may not be this app's own directory (e.g. Outstatic here is
+// configured for johnhenry/johnhenry.github.io, a separate repo from this
+// one). IST_REPO_PATH points at that local checkout, relative to this app's
+// cwd; defaults to "." for the case where Instatic's target repo is this
+// app's own repo (Instatic's original assumption).
+const REPO_ROOT = join(process.cwd(), process.env.IST_REPO_PATH || '.')
+const CONTENT_DIR = join(REPO_ROOT, process.env.OST_CONTENT_PATH || 'outstatic/content')
 
 // Custom stringifier to preserve exact YAML format
 function customStringify(data: any) {
@@ -38,6 +49,7 @@ function customStringify(data: any) {
 
   // Build YAML lines with proper indentation
   Object.entries(data).forEach(([key, value]) => {
+    if (value === undefined) return // omit rather than write the literal string "undefined"
     if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
       // Special handling for nested objects like author
       const nestedLines = stringifyValue(value, 2)
@@ -116,17 +128,37 @@ export async function saveDocument(collection: string, slug: string, { content, 
       // File doesn't exist, that's okay for new documents
     }
 
+    // Defaults that make sense for every collection.
+    const commonDefaults = {
+      tags: metadata.tags || existingData.tags || [],
+      status: metadata.status || existingData.status || 'draft',
+      updatedAt: new Date().toISOString(),
+      publishedAt:
+        metadata.publishedAt ||
+        existingData.publishedAt ||
+        ((metadata.status || existingData.status) === 'published'
+          ? new Date().toISOString()
+          : undefined),
+    }
+
+    // "projects" documents (Outstatic's original schema) additionally carry
+    // type/color/an author object; other collections (e.g. "posts") have
+    // their own shape and shouldn't have these invented for them.
+    const collectionDefaults =
+      collection === 'projects'
+        ? {
+            author: metadata.author || existingData.author || { name: '', picture: '' },
+            type: metadata.type || existingData.type || '::app::',
+            color: metadata.color || existingData.color || 'rose',
+          }
+        : {}
+
     // Merge metadata while preserving format
     const newMetadata = {
       ...existingData,
       ...metadata,
-      // Ensure required fields exist
-      author: metadata.author || existingData.author || { name: '', picture: '' },
-      tags: metadata.tags || existingData.tags || [],
-      status: metadata.status || existingData.status || 'draft',
-      type: metadata.type || existingData.type || '::app::',
-      color: metadata.color || existingData.color || 'rose',
-      updatedAt: new Date().toISOString()
+      ...commonDefaults,
+      ...collectionDefaults,
     }
 
     // Format the document with custom YAML stringifier
