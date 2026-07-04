@@ -22,7 +22,7 @@ function ErrorDisplay({ error }: { error: Error }) {
   )
 }
 
-export default async function Page({ params }: any ) {
+export default async function Page(props: { params: Promise<{ ist?: string[] }> }) {
   // Check if Instatic is activated
   const isActivated = process.env.IST_ACTIVATED === 'true'
   if (!isActivated) {
@@ -31,6 +31,7 @@ export default async function Page({ params }: any ) {
 
   try {
     const collections = await getCollections()
+    const params = await props.params
     const collectionName = params.ist?.[0]
     
     let documents:any[] = []

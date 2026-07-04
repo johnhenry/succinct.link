@@ -19,14 +19,17 @@ export async function PUT(request: Request) {
       ...metadata,
       status,
       updatedAt: now,
-      ...(status === 'published' && !metadata.publishedAt && { publishedAt: now })
+      ...(status === 'published' && !metadata.publishedAt && { publishedAt: now }),
+      tags: metadata.tags || [],
+      // "projects" documents carry an author object (Outstatic's original
+      // schema); other collections (e.g. "posts") define their own author
+      // shape (a plain string) and shouldn't have this invented for them.
+      ...(collection === 'projects' && { author: metadata.author || { name: '', picture: '' } })
     }
 
-    const success = await saveDocument(collection, slug, { 
-      content, 
+    const success = await saveDocument(collection, slug, {
+      content,
       ...updatedMetadata,
-      author: metadata.author || { name: '', picture: '' },
-      tags: metadata.tags || []
     })
     
     if (success) {

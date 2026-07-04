@@ -2,9 +2,18 @@ import { readFile, writeFile, readdir, mkdir } from 'fs/promises'
 import { join } from 'path'
 import matter from 'gray-matter'
 
-// Must match Outstatic's own content path (OST_CONTENT_PATH env var, same
-// default Outstatic itself uses) -- these two CMSes edit the same files.
-const CONTENT_DIR = join(process.cwd(), process.env.OST_CONTENT_PATH || 'outstatic/content')
+// Instatic edits files on the local filesystem, unlike Outstatic (which
+// reads/writes via GitHub's API and can target any repo regardless of local
+// checkout layout). OST_CONTENT_PATH is a path *within the target repo's
+// git tree* from Outstatic's perspective -- reused here for the content
+// subdirectory name, but resolved against a *local checkout* of that same
+// repo, which may not be this app's own directory (e.g. Outstatic here is
+// configured for johnhenry/johnhenry.github.io, a separate repo from this
+// one). IST_REPO_PATH points at that local checkout, relative to this app's
+// cwd; defaults to "." for the case where Instatic's target repo is this
+// app's own repo (Instatic's original assumption).
+const REPO_ROOT = join(process.cwd(), process.env.IST_REPO_PATH || '.')
+const CONTENT_DIR = join(REPO_ROOT, process.env.OST_CONTENT_PATH || 'outstatic/content')
 
 // Custom stringifier to preserve exact YAML format
 function customStringify(data: any) {
