@@ -2,7 +2,9 @@ import { readFile, writeFile, readdir, mkdir } from 'fs/promises'
 import { join } from 'path'
 import matter from 'gray-matter'
 
-const CONTENT_DIR = join(process.cwd(), 'outstatic/content')
+// Must match Outstatic's own content path (OST_CONTENT_PATH env var, same
+// default Outstatic itself uses) -- these two CMSes edit the same files.
+const CONTENT_DIR = join(process.cwd(), process.env.OST_CONTENT_PATH || 'outstatic/content')
 
 // Custom stringifier to preserve exact YAML format
 function customStringify(data: any) {
@@ -38,6 +40,7 @@ function customStringify(data: any) {
 
   // Build YAML lines with proper indentation
   Object.entries(data).forEach(([key, value]) => {
+    if (value === undefined) return // omit rather than write the literal string "undefined"
     if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
       // Special handling for nested objects like author
       const nestedLines = stringifyValue(value, 2)
@@ -116,17 +119,37 @@ export async function saveDocument(collection: string, slug: string, { content, 
       // File doesn't exist, that's okay for new documents
     }
 
+    // Defaults that make sense for every collection.
+    const commonDefaults = {
+      tags: metadata.tags || existingData.tags || [],
+      status: metadata.status || existingData.status || 'draft',
+      updatedAt: new Date().toISOString(),
+      publishedAt:
+        metadata.publishedAt ||
+        existingData.publishedAt ||
+        ((metadata.status || existingData.status) === 'published'
+          ? new Date().toISOString()
+          : undefined),
+    }
+
+    // "projects" documents (Outstatic's original schema) additionally carry
+    // type/color/an author object; other collections (e.g. "posts") have
+    // their own shape and shouldn't have these invented for them.
+    const collectionDefaults =
+      collection === 'projects'
+        ? {
+            author: metadata.author || existingData.author || { name: '', picture: '' },
+            type: metadata.type || existingData.type || '::app::',
+            color: metadata.color || existingData.color || 'rose',
+          }
+        : {}
+
     // Merge metadata while preserving format
     const newMetadata = {
       ...existingData,
       ...metadata,
-      // Ensure required fields exist
-      author: metadata.author || existingData.author || { name: '', picture: '' },
-      tags: metadata.tags || existingData.tags || [],
-      status: metadata.status || existingData.status || 'draft',
-      type: metadata.type || existingData.type || '::app::',
-      color: metadata.color || existingData.color || 'rose',
-      updatedAt: new Date().toISOString()
+      ...commonDefaults,
+      ...collectionDefaults,
     }
 
     // Format the document with custom YAML stringifier
